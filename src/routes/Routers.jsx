@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "../pages/FrontEnd/Home";
 import About from "../pages/FrontEnd/About";
 import Products from "../pages/FrontEnd/Products";
+import Categories from "../pages/FrontEnd/Categories";
 
 export default function Routers() {
   return (
@@ -11,6 +12,7 @@ export default function Routers() {
         <Route path="/" element={<Home />} />
         <Route path="/About" element={<About />} />
         <Route path="/Products" element={<Products />} />
+        <Route path="/Categories" element={<Categories />} />
       </Routes>
     </BrowserRouter>
   );
