@@ -8,7 +8,7 @@ export default function NavBarFront() {
   const Products = "/Products";
   return (
     <>
-      <nav className="bg-white border-gray-200 dark:bg-gray-900">
+      <nav className="bg-white  dark:bg-gray-900 border-b-2 border-green-500">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <Link
             to="/"
@@ -48,7 +48,7 @@ export default function NavBarFront() {
               <li>
                 <Link
                   to="/"
-                  className="block py-2 px-3 text-yellow-400 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-emerald-900 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  className="block py-2 px-3 text-yellow-400 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-green-600 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
                   Home
                 </Link>
@@ -56,7 +56,7 @@ export default function NavBarFront() {
               <li>
                 <Link
                   to={Products}
-                  className="block py-2 px-3 text-yellow-400 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-emerald-900 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  className="block py-2 px-3 text-yellow-400 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-green-600 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
                   Products
                 </Link>
@@ -64,7 +64,7 @@ export default function NavBarFront() {
               <li>
                 <Link
                   to="/Categories"
-                  className="block py-2 px-3 text-yellow-400 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-emerald-900 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  className="block py-2 px-3 text-yellow-400 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-green-600 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
                   Categories
                 </Link>
@@ -72,7 +72,7 @@ export default function NavBarFront() {
               <li>
                 <Link
                   to="/About"
-                  className="block py-2 px-3 text-yellow-400 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-emerald-900 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  className="block py-2 px-3 text-yellow-400 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-green-600 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
                   About
                 </Link>
@@ -80,7 +80,7 @@ export default function NavBarFront() {
               <li>
                 <Link
                   to="#"
-                  className="block py-2 px-3 text-yellow-400 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-emerald-900 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  className="block py-2 px-3 text-yellow-400 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-green-600 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
                   Contact
                 </Link>

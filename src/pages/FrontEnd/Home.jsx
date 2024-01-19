@@ -15,7 +15,7 @@ export default function Home() {
       <nav>
         <NavBarFront />
       </nav>
-      <section>
+      <section className="bg-gray-100">
         <TopPage />
         <TopOfCenter />
         <TopOfCenterProducts />

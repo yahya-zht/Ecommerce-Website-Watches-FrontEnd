@@ -9,7 +9,7 @@ export default function Categories() {
       <nav>
         <NavBarFront />
       </nav>
-      <section>
+      <section className="bg-gray-100">
         <CategoriesComponent />
       </section>
       <footer>

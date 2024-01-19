@@ -5,11 +5,11 @@ import Imagewatches from "../../../assets/image/watches_Home02.png";
 export default function TopPage() {
   return (
     <>
-      <div className="w-full">
+      <div className="w-full ">
         <h1 className="text-yellow-400 bg-green-700 text-3xl text-center font-bold py-3">
           Page Home
         </h1>
-        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        <div className="max-w-screen-xl flex flex-wrap bg-white items-center justify-between mx-auto p-4">
           <div className="w-2/3">
             <h1 className="text-6xl text-green-700 font-bold font-mono">
               The best Store for Watches

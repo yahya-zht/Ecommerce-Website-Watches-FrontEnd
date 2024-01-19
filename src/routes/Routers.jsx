@@ -13,6 +13,7 @@ export default function Routers() {
         <Route path="/About" element={<About />} />
         <Route path="/Products" element={<Products />} />
         <Route path="/Categories" element={<Categories />} />
+        {/* <Route path="/About" element={<Abo />} /> */}
       </Routes>
     </BrowserRouter>
   );
