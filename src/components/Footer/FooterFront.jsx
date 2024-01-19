@@ -31,7 +31,7 @@ export default function FooterFront() {
               </Link>
             </li>
             <li>
-              <Link to="#" class="hover:underline">
+              <Link to="/Contact" class="hover:underline">
                 Contact
               </Link>
             </li>

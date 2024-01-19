@@ -4,6 +4,7 @@ import Home from "../pages/FrontEnd/Home";
 import About from "../pages/FrontEnd/About";
 import Products from "../pages/FrontEnd/Products";
 import Categories from "../pages/FrontEnd/Categories";
+import Contact from "../pages/FrontEnd/Contact";
 
 export default function Routers() {
   return (
@@ -13,7 +14,7 @@ export default function Routers() {
         <Route path="/About" element={<About />} />
         <Route path="/Products" element={<Products />} />
         <Route path="/Categories" element={<Categories />} />
-        {/* <Route path="/About" element={<Abo />} /> */}
+        <Route path="/Contact" element={<Contact />} />
       </Routes>
     </BrowserRouter>
   );

@@ -11,7 +11,7 @@ export default function TopOfCenter() {
   return (
     <>
       <div className="w-full">
-        <div className="max-w-screen-xl mx-auto">
+        <div className="max-w-screen-xl mx-auto bg-white pb-5 rounded-b-xl shadow-xl">
           <div className="flex">
             <CardsShipping
               icon={faTruckFast}
