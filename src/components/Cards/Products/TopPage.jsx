@@ -4,7 +4,7 @@ import React from "react";
 
 export default function TopPage() {
   return (
-    <div className="w-full bg-white border-t-2 border-green-600">
+    <div className="w-full bg-white ">
       <div className="flex justify-between items-center mr-5 pt-2 pb-3">
         <p className="hidden md:block w-1/7"></p>
         <div className="">
