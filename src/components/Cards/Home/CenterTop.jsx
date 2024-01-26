@@ -7,7 +7,7 @@ export default function CenterTop() {
       <div className="w-full my-10">
         <div className="max-w-screen-xl mx-auto">
           <div className="flex shadow-xl rounded-xl">
-            <div className="w-1/2 p-5 flex flex-col justify-center">
+            <div className="w-1/2 p-5 flex flex-col justify-center bg-white pl-10 rounded-l-xl">
               <p className="font-semibold text-3xl text-green-600">
                 Special Offer
               </p>

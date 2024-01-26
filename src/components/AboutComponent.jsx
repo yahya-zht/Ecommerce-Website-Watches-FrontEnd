@@ -100,7 +100,7 @@ export default function AboutComponent() {
               </h2>
 
               <ul
-                role="list"
+                // role="list"
                 className="space-y-4 text-gray-500 dark:text-gray-400"
               >
                 <li class="flex space-x-2 rtl:space-x-reverse items-center">
