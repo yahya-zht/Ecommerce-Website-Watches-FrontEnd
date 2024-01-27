@@ -6,9 +6,8 @@ function App() {
   return (
     <>
       <ShoppingCartProvider>
-        <Routers />;
+        <Routers />
       </ShoppingCartProvider>
-      ;
     </>
   );
 }

@@ -15,6 +15,7 @@ export default function ShowProductAD() {
 
   useEffect(() => {
     fetchProducts();
+    console.log("okokok");
   }, []);
   const fetchProducts = async () => {
     await axios

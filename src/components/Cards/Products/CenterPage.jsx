@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CardsProduct } from "./CardsProduct";
+import { useShoppingCart } from "../../../context/ShoppingCart";
 // import image1 from "../../../assets/image/pexels-antony-trivet-9878568.jpg";
 // import image2 from "../../../assets/image/pexels-antony-trivet-9979735.jpg";
 // import image3 from "../../../assets/image/pexels-antony-trivet-9981079.jpg";
@@ -22,9 +23,12 @@ export default function CenterPage() {
     // .then((data) => setProviders(data.Providers));
   }, []);
   // console.log(Products);
+  const { incrementItemQuantity } = useShoppingCart();
+
   const ShowProducts = Products.map((product) => (
     <div key={product.id}>
       <CardsProduct
+        ic={() => incrementItemQuantity(product.id)}
         key={product.id}
         image={product.Image_Product}
         title={product.Name}

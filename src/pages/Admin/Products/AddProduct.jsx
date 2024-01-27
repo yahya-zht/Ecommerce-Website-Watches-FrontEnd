@@ -34,7 +34,7 @@ export default function AddProduct() {
       setProviders(data.Providers);
     });
   };
-  console.log(Providers);
+  // console.log(Providers);
   const createProduct = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -56,9 +56,9 @@ export default function AddProduct() {
         navigate("/Admin/Products");
       })
       .catch(({ response }) => {
-        if (response.status === 404) {
+        if (response.status === 442) {
           console.log(response.data.errors);
-          console.log("Error 404 ");
+          console.log("Error 442 ");
         } else {
           console.log("Error");
           console.log(response.data);

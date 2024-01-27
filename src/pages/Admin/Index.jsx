@@ -10,7 +10,7 @@ export default function Index() {
           <NavAdmin />
         </nav>
         <section className="w-4/5 bg-gray-50 p-2">
-          <div className="rounded-xl my-2 shadow-xl  ">
+          <div className="rounded-xl my-2 shadow-xl  h-full flex flex-col justify-center">
             <Outlet />
           </div>
         </section>

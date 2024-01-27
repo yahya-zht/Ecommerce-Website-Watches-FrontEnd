@@ -41,7 +41,10 @@ const ShoppingCartProvider = ({ children }) => {
       } else {
         return currItems.map((item) => {
           if (item.id === id) {
-            return { ...item, quantity: item.quantity - 1 };
+            return {
+              ...item,
+              quantity: item.quantity > 0 ? item.quantity - 1 : 0,
+            };
           } else {
             return item;
           }
@@ -52,6 +55,9 @@ const ShoppingCartProvider = ({ children }) => {
   const removeItemFromCart = (id) => {
     setCartItems((currItems) => currItems.filter((item) => item.id !== id));
   };
+  const removeAllItemsFromCart = () => {
+    setCartItems([]);
+  };
   return (
     <ShoppingCart.Provider
       value={{
@@ -61,6 +67,7 @@ const ShoppingCartProvider = ({ children }) => {
         decrementItemQuantity,
         removeItemFromCart,
         cartQuantity,
+        removeAllItemsFromCart,
       }}
     >
       {children}

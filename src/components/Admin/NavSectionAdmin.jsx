@@ -8,7 +8,7 @@ export default function NavSectionAdmin(props) {
       <div className="w-1/5 flex justify-center">
         <Link
           to={props.href}
-          className=" py-2 bg-green-600 w-full text-center  text-white rounded-xl font-semibold"
+          className=" py-2 bg-amber-600 w-full text-center  text-white rounded-xl font-semibold hover:bg-green-600"
         >
           {props.Link}
         </Link>

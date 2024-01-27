@@ -92,6 +92,7 @@ export const CardsProduct = (props) => {
               </div>
               <p>
                 <FontAwesomeIcon
+                  onClick={props.ic}
                   icon={faCartShopping}
                   className="text-green-600 cursor-pointer text-xl hover:text-amber-500 transition  hover:scale-125"
                 />
@@ -102,7 +103,7 @@ export const CardsProduct = (props) => {
                 to={props.link}
                 className="text-white w-full bg-green-600 hover:bg-amber-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
-                Add to cart
+                Show
               </Link>
             </div>
           </div>

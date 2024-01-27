@@ -4,7 +4,7 @@ import { CartShopping } from "./Cards/CartShopping";
 import { useEffect, useState } from "react";
 
 export default function ShoppingCartCompoents() {
-  const { cartItems, TotalPrice } = useShoppingCart();
+  const { cartItems, removeAllItemsFromCart } = useShoppingCart();
   const [Productss, setProductss] = useState([]);
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/Products")
@@ -15,17 +15,6 @@ export default function ShoppingCartCompoents() {
   const Products = cartItems.map((item) => {
     return <CartShopping id={item.id} Quantity={item.quantity} />;
   });
-
-  const T = () => {
-    const Total = 0;
-    const T = document.getElementsByClassName("to").length;
-    for (let i = 0; i < T; i++) {
-      const a = document.getElementsByClassName("to")[i].innerHTML;
-      console.log(a);
-      Total += a;
-      console.log(Total);
-    }
-  };
 
   return (
     <section class=" dark:bg-gray-900 p-3 sm:p-5">
@@ -74,7 +63,9 @@ export default function ShoppingCartCompoents() {
                       );
                     }, 0)}
                   </td>
-                  <td class="px-4 py-3">Delete</td>
+                  <td class="px-4 py-3">
+                    <button onClick={removeAllItemsFromCart}>Remove All</button>
+                  </td>
                 </tr>
               </tbody>
             </table>

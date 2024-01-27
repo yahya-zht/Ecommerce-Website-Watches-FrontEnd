@@ -64,6 +64,7 @@ export default function ShowProductCard(props) {
               <Link to="#">
                 <FontAwesomeIcon
                   title="Add to cart"
+                  onClick={() => incrementItemQuantity(props.id)}
                   className="text-green-600 hover:text-amber-500 text-4xl "
                   icon={faCartPlus}
                 />
