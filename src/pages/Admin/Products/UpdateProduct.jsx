@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function UpdateProduct() {
   // const id = window.location.pathname.slice(-1)[0];
@@ -21,62 +22,137 @@ export default function UpdateProduct() {
   const [Provider, setProvider] = useState();
   const [Providers, setProviders] = useState([]);
   const [Errors, setErrors] = useState([]);
+  const auth = useAuth();
+  // useEffect(() => {
+  //   fetchProduct();
+  // }, []);
+  // const fetchProduct = async () => {
+  //   await axios
+  //     .get(`http://127.0.0.1:8000/api/Admin/Products/${id}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${auth.token}`,
+  //       },
+  //     })
+  //     .then(({ data }) => {
+  //       const {
+  //         Name,
+  //         Description,
+  //         Price_Purchase,
+  //         Price_First,
+  //         Price_Sale,
+  //         Quantity,
+  //         provider_id,
+  //         Ref,
+  //         Sales,
+  //         Image_Product,
+  //       } = data.product;
+  //       setRef(Ref);
+  //       setName(Name);
+  //       setDescription(Description);
+  //       setPricePur(Price_Purchase);
+  //       setPriceSal(Price_Sale);
+  //       setPriceOld(Price_First);
+  //       setQuantier(Quantity);
+  //       setSales(Sales);
+  //       setProvider(provider_id);
+  //       setImage_Product(Image_Product);
+  //     })
+  //     .catch(({ response: { data } }) => {
+  //       console.log(data.message);
+  //     });
+  // };
+  // useEffect(() => {
+  //   fetchProviders();
+  // }, []);
+  // const fetchProviders = async () => {
+  //   await axios
+  //     .get("http://127.0.0.1:8000/api/Admin/Providers", {
+  //       headers: {
+  //         Authorization: `Bearer ${auth.token}`,
+  //       },
+  //     })
+  //     .then(({ data }) => {
+  //       setProviders(data.Providers);
+  //     });
+  // };
   useEffect(() => {
     fetchProduct();
   }, []);
+
   const fetchProduct = async () => {
-    // const res = await axios.get(`http://127.0.0.1:8000/api/Products/${id}`);
-    // console.log(res.data["product"]);
-    await axios
-      .get(`http://127.0.0.1:8000/api/Products/${id}`)
-      .then(({ data }) => {
-        console.log(data);
-        console.log("OK");
-        const {
-          Name,
-          Description,
-          Price_Purchase,
-          Price_First,
-          Price_Sale,
-          Quantity,
-          provider_id,
-          Ref,
-          Sales,
-          Image_Product,
-        } = data.product;
-        setRef(Ref);
-        setName(Name);
-        setDescription(Description);
-        setPricePur(Price_Purchase);
-        setPriceSal(Price_Sale);
-        setPriceOld(Price_First);
-        setQuantier(Quantity);
-        setSales(Sales);
-        setProvider(provider_id);
-        setImage_Product(Image_Product);
-        console.log(provider_id);
-      })
-      .catch(({ response: { data } }) => {
-        console.log(data.message);
-        console.log("No");
-      });
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/Admin/Products/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      const {
+        Name,
+        Description,
+        Price_Purchase,
+        Price_First,
+        Price_Sale,
+        Quantity,
+        provider_id,
+        Ref,
+        Sales,
+        Image_Product,
+      } = response.data.product;
+
+      setRef(Ref);
+      setName(Name);
+      setDescription(Description);
+      setPricePur(Price_Purchase);
+      setPriceSal(Price_Sale);
+      setPriceOld(Price_First);
+      setQuantier(Quantity);
+      setSales(Sales);
+      setProvider(provider_id);
+      setImage_Product(Image_Product);
+    } catch (error) {
+      console.error(
+        "Error fetching product:",
+        error.response?.data?.message || error.message
+      );
+      // Handle error appropriately, e.g., show an error message to the user
+    }
+  };
+
+  useEffect(() => {
+    fetchProviders();
+  }, []);
+
+  const fetchProviders = async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/Admin/Providers",
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      setProviders(response.data.Providers);
+    } catch (error) {
+      console.error(
+        "Error fetching providers:",
+        error.response?.data?.message || error.message
+      );
+      // Handle error appropriately, e.g., show an error message to the user
+    }
   };
 
   const changeHandler = (e) => {
     setImage_Product(e.target.files[0]);
   };
-  useEffect(() => {
-    fetchProviders();
-  }, []);
-  const fetchProviders = async () => {
-    await axios.get("http://127.0.0.1:8000/api/Providers").then(({ data }) => {
-      // console.log(data.Providers);
-      setProviders(data.Providers);
-    });
-  };
-  console.log(Provider);
   const updateProduct = async (e) => {
     e.preventDefault();
+
     const formData = new FormData();
     formData.append("_method", "PATCH");
     formData.append("Ref", Ref);
@@ -88,25 +164,80 @@ export default function UpdateProduct() {
     formData.append("Price_First", PriceOld);
     formData.append("Sales", Sales);
     formData.append("provider_id", Provider);
+
     if (Image_Product !== null) {
       formData.append("Image_Product", Image_Product);
     }
-    await axios
-      .post("http://127.0.0.1:8000/api/Products/" + id, formData)
-      .then(({ data }) => {
-        console.log(data);
-        navigate("/Admin/Products");
-      })
-      .catch(({ response }) => {
-        if (response.status === 422) {
-          console.log(response.data.errors);
-          setErrors(response.data.errors);
-        } else {
-          console.log(response.data.messages);
-          console.log(response.data.errors);
+
+    try {
+      const response = await axios.post(
+        `http://127.0.0.1:8000/api/Admin/Products/${id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+            "Content-Type": "multipart/form-data", // Set the content type for FormData
+          },
         }
-      });
+      );
+
+      console.log(response.data);
+      navigate("/Admin/Products");
+    } catch (error) {
+      console.error(
+        "Error updating product:",
+        error.response?.data || error.message
+      );
+
+      if (error.response && error.response.status === 422) {
+        console.log("Validation errors:", error.response.data.errors);
+        setErrors(error.response.data.errors);
+      } else {
+        console.log("Other error messages:", error.response?.data?.messages);
+      }
+    }
   };
+
+  // const updateProduct = async (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData();
+  //   formData.append("_method", "PATCH");
+  //   formData.append("Ref", Ref);
+  //   formData.append("Name", Name);
+  //   formData.append("Description", Description);
+  //   formData.append("Price_Purchase", PricePur);
+  //   formData.append("Price_Sale", PriceSal);
+  //   formData.append("Quantity", Quantier);
+  //   formData.append("Price_First", PriceOld);
+  //   formData.append("Sales", Sales);
+  //   formData.append("provider_id", Provider);
+  //   if (Image_Product !== null) {
+  //     formData.append("Image_Product", Image_Product);
+  //   }
+  //   await axios
+  //     .post(
+  //       "http://127.0.0.1:8000/api/Admin/Products/",
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${auth.token}`,
+  //         },
+  //       } + id,
+  //       formData
+  //     )
+  //     .then(({ data }) => {
+  //       console.log(data);
+  //       navigate("/Admin/Products");
+  //     })
+  //     .catch(({ response }) => {
+  //       if (response.status === 422) {
+  //         console.log(response.data.errors);
+  //         setErrors(response.data.errors);
+  //       } else {
+  //         console.log(response.data.messages);
+  //         console.log(response.data.errors);
+  //       }
+  //     });
+  // };
   return (
     <>
       <div className="p-5 mt-10 bg-white rounded-2xl shadow-xl">

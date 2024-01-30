@@ -1,40 +1,97 @@
 import React, { useEffect, useState } from "react";
 import NavSectionAdmin from "../../../components/Admin/NavSectionAdmin";
 import axios from "axios";
-import {
-  faEye,
-  faPenToSquare,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function AllOrders() {
   const [Orders, setOrders] = useState([]);
+  const auth = useAuth();
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/Orders")
-      .then((response) => response.json())
-      .then((data) => setOrders(data.Orders));
+    fetchOrders();
   }, []);
 
-  const fetchProducts = async () => {
-    await axios
-      .get("http://127.0.0.1:8000/api/Orders")
-      .then(({ data }) => setOrders(data.Orders));
-  };
-  const deleteOrder = async (id) => {
-    if (window.confirm("Are you sure you want to delete this Order?")) {
-      await axios
-        .delete(`http://127.0.0.1:8000/api/Orders/${id}`)
-        .then(({ data }) => {
-          console.log(data.message);
-          fetchProducts();
-        })
-        .catch(({ response: { data } }) => {
-          console.log(data.message);
-        });
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/Admin/Orders",
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      setOrders(response.data.Orders);
+    } catch (error) {
+      console.error(
+        "Error fetching orders:",
+        error.response?.data?.message || error.message
+      );
     }
   };
+
+  const deleteOrder = async (id) => {
+    if (window.confirm("Are you sure you want to delete this order?")) {
+      try {
+        const response = await axios.delete(
+          `http://127.0.0.1:8000/api/Admin/Orders/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          }
+        );
+
+        console.log(response.data.message);
+        fetchOrders();
+      } catch (error) {
+        console.error(
+          "Error deleting order:",
+          error.response?.data?.message || error.message
+        );
+      }
+    }
+  };
+
+  // useEffect(() => {
+  //   fetch("http://127.0.0.1:8000/api/Admin/Orders", {
+  //     headers: {
+  //       Authorization: `Bearer ${auth.token}`,
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => setOrders(data.Orders));
+  // }, []);
+
+  // const fetchProducts = async () => {
+  //   await axios
+  //     .get("http://127.0.0.1:8000/api/Admin/Orders", {
+  //       headers: {
+  //         Authorization: `Bearer ${auth.token}`,
+  //       },
+  //     })
+  //     .then(({ data }) => setOrders(data.Orders));
+  // };
+  // const deleteOrder = async (id) => {
+  //   if (window.confirm("Are you sure you want to delete this Order?")) {
+  //     await axios
+  //       .delete(`http://127.0.0.1:8000/api/Admin/Orders/${id}`, {
+  //         headers: {
+  //           Authorization: `Bearer ${auth.token}`,
+  //         },
+  //       })
+  //       .then(({ data }) => {
+  //         console.log(data.message);
+  //         fetchProducts();
+  //       })
+  //       .catch(({ response: { data } }) => {
+  //         console.log(data.message);
+  //       });
+  //   }
+  // };
   const ShowOrders = Orders.map((Order) => (
     <tr
       className="bg-white text-sm dark:bg-gray-800  hover:bg-amber-50 dark:hover:bg-gray-600"

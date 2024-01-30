@@ -29,42 +29,53 @@ import EditProvider from "../pages/Admin/Providers/EditProvider";
 import ShowOrder from "../pages/Admin/Orders/ShowOrder";
 import ShowCategory from "../pages/FrontEnd/ShowCategory";
 import CategoriesIndex from "../pages/FrontEnd/CategoriesIndex";
+import Login from "../pages/Admin/Login";
+import Register from "../pages/Admin/Register";
+import AuthProvider from "../context/AuthContext";
+import PrivateRoute from "./PrivateRoute";
+import EditCategory from "../pages/Admin/Categories/EditCategory";
 
 export default function Routers() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/About" element={<About />} />
-        <Route path="/Products" element={<Products />} />
-        <Route path="/Product/:id" element={<ShowProduct />} />
-        <Route path="/Categories" element={<CategoriesIndex />}>
-          <Route path="" element={<Categories />} />
-          <Route path="Show" element={<ShowCategory />} />
-        </Route>
-        <Route path="/Contact" element={<Contact />} />
-        <Route path="/ShoppingCart" element={<ShoppingCart />} />
-        <Route path="/Order" element={<Payment />} />
-        <Route path="/Orderconfirmed" element={<Order />} />
-        <Route path="/Admin" element={<Index />}>
-          <Route path="" element={<Dashborad />} />
-          <Route path="Products" element={<AllProducts />} />
-          <Route path="Products/Create" element={<AddProduct />} />
-          <Route path="Products/Edit/:id" element={<UpdateProduct />} />
-          <Route path="Products/Show/:id" element={<ShowProductAD />} />
-          <Route path="Categories" element={<AllCategories />} />
-          <Route path="Categories/Create" element={<CreateCategory />} />
-          <Route path="Categories/Edit/:id" element={<CreateCategory />} />
-          <Route path="Providers" element={<AllProviders />} />
-          <Route path="Providers/Create" element={<CreateProvider />} />
-          <Route path="Providers/Edit/:id" element={<EditProvider />} />
-          <Route path="Profile" element={<Profile />} />
-          <Route path="Customers" element={<AllCustomers />} />
-          <Route path="Customers/Edit/:id" element={<EditCustomer />} />
-          <Route path="Orders" element={<AllOrders />} />
-          <Route path="Orders/Show/:id" element={<ShowOrder />} />
-        </Route>
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/About" element={<About />} />
+          <Route path="/Products" element={<Products />} />
+          <Route path="/Product/:id" element={<ShowProduct />} />
+          <Route path="/Categories" element={<CategoriesIndex />}>
+            <Route path="" element={<Categories />} />
+            <Route path="Show" element={<ShowCategory />} />
+          </Route>
+          <Route path="/Contact" element={<Contact />} />
+          <Route path="/ShoppingCart" element={<ShoppingCart />} />
+          <Route path="/Order" element={<Payment />} />
+          <Route path="/Orderconfirmed" element={<Order />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/Admin" element={<Index />}>
+              <Route path="" element={<Dashborad />} />
+              <Route path="Products" element={<AllProducts />} />
+              <Route path="Products/Create" element={<AddProduct />} />
+              <Route path="Products/Edit/:id" element={<UpdateProduct />} />
+              <Route path="Products/Show/:id" element={<ShowProductAD />} />
+              <Route path="Categories" element={<AllCategories />} />
+              <Route path="Categories/Create" element={<CreateCategory />} />
+              <Route path="Categories/Edit/:id" element={<EditCategory />} />
+              <Route path="Providers" element={<AllProviders />} />
+              <Route path="Providers/Create" element={<CreateProvider />} />
+              <Route path="Providers/Edit/:id" element={<EditProvider />} />
+              <Route path="Profile" element={<Profile />} />
+              <Route path="Customers" element={<AllCustomers />} />
+              <Route path="Customers/Edit/:id" element={<EditCustomer />} />
+              <Route path="Orders" element={<AllOrders />} />
+              <Route path="Orders/Show/:id" element={<ShowOrder />} />
+              <Route path="Register" element={<Register />} />
+            </Route>
+          </Route>
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

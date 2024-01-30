@@ -13,8 +13,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../../assets/image/logo_watche.png";
-
+import { useAuth } from "../../context/AuthContext";
 export default function NavAdmin() {
+  const auth = useAuth();
   return (
     <>
       <div className="flex flex-col ">
@@ -113,6 +114,11 @@ export default function NavAdmin() {
               <FontAwesomeIcon icon={faGear} className="mr-2 w-8" />
               <span className="font-semibold">Settings</span>
             </Link>
+          </li>
+          <li className="flex ">
+            <button onClick={() => auth.logOut()} className="btn-submit">
+              logout
+            </button>
           </li>
         </ul>
       </div>

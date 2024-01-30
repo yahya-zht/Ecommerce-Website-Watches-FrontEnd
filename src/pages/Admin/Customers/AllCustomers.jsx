@@ -1,40 +1,96 @@
 import React, { useEffect, useState } from "react";
-import NavSectionAdmin from "../../../components/Admin/NavSectionAdmin";
 import axios from "axios";
-import {
-  faEye,
-  faPenToSquare,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function AllCustomers() {
   const [Customers, setCustomers] = useState([]);
+  const auth = useAuth();
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/Customers")
-      .then((response) => response.json())
-      .then((data) => setCustomers(data.Customers));
+    fetchCustomers();
   }, []);
 
-  const fetchProducts = async () => {
-    await axios
-      .get("http://127.0.0.1:8000/api/Customers")
-      .then(({ data }) => setCustomers(data.Customers));
-  };
-  const deleteCustomer = async (id) => {
-    if (window.confirm("Are you sure you want to delete this product?")) {
-      await axios
-        .delete(`http://127.0.0.1:8000/api/Customers/${id}`)
-        .then(({ data }) => {
-          console.log(data.message);
-          fetchProducts();
-        })
-        .catch(({ response: { data } }) => {
-          console.log(data.message);
-        });
+  const fetchCustomers = async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/Admin/Customers",
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      setCustomers(response.data.Customers);
+    } catch (error) {
+      console.error(
+        "Error fetching customers:",
+        error.response?.data?.message || error.message
+      );
     }
   };
+
+  const deleteCustomer = async (id) => {
+    if (window.confirm("Are you sure you want to delete this customer?")) {
+      try {
+        const response = await axios.delete(
+          `http://127.0.0.1:8000/api/Admin/Customers/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          }
+        );
+
+        console.log(response.data.message);
+        fetchCustomers();
+      } catch (error) {
+        console.error(
+          "Error deleting customer:",
+          error.response?.data?.message || error.message
+        );
+      }
+    }
+  };
+
+  // useEffect(() => {
+  //   fetch("http://127.0.0.1:8000/api/Customers", {
+  //     headers: {
+  //       Authorization: `Bearer ${auth.token}`,
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => setCustomers(data.Customers));
+  // }, []);
+
+  // const fetchCustomers = async () => {
+  //   await axios
+  //     .get("http://127.0.0.1:8000/api/Customers", {
+  //       headers: {
+  //         Authorization: `Bearer ${auth.token}`,
+  //       },
+  //     })
+  //     .then(({ data }) => setCustomers(data.Customers));
+  // };
+  // const deleteCustomer = async (id) => {
+  //   if (window.confirm("Are you sure you want to delete this product?")) {
+  //     await axios
+  //       .delete(`http://127.0.0.1:8000/api/Admin/Customers/${id}`, {
+  //         headers: {
+  //           Authorization: `Bearer ${auth.token}`,
+  //         },
+  //       })
+  //       .then(({ data }) => {
+  //         console.log(data.message);
+  //         fetchCustomers();
+  //       })
+  //       .catch(({ response: { data } }) => {
+  //         console.log(data.message);
+  //       });
+  //   }
+  // };
   const ShowCustomers = Customers.map((Customer) => (
     <tr
       className="bg-white text-sm dark:bg-gray-800 hover:bg-amber-50 dark:hover:bg-gray-600"

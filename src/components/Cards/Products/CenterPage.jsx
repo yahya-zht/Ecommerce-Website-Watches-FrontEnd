@@ -16,7 +16,7 @@ export default function CenterPage() {
   // .then((data) => setProducts(data.Produits));
   // }, []);
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/Products")
+    fetch("http://127.0.0.1:8000/api/products")
       .then((response) => response.json())
       // .then((data) => console.log(data.Providers))
       .then((data) => setProducts(data.Products));

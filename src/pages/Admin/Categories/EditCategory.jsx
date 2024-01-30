@@ -3,41 +3,49 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function EditCategory() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [Name, setName] = useState("");
   const [Image, setImage] = useState("");
-  const [NumberProducts, setNumberProducts] = useState();
+  const [NumberProducts, setNumberProducts] = useState("");
   const [Error, setError] = useState([]);
-  useEffect(() => {
-    fetchCategory();
-  }, []);
-  const fetchCategory = async () => {
-    await axios
-      .get(`http://127.0.0.1:8000/api/Categories/${id}`)
-      .then(({ data }) => {
-        console.log(data);
-        console.log("OK");
-        const { Name, NumberProducts, Image } = data.Category;
-        setName(Name);
-        setNumberProducts(NumberProducts);
-        setImage(Image);
-      })
-      .catch(({ response: { data } }) => {
-        console.log(data.message);
-        console.log("No");
-      });
-  };
-
-  //   const handleChange = (file) => {
-  //     setImage(file[0]);
-  //   };
+  const auth = useAuth();
   const changeHandler = (e) => {
     setImage(e.target.files[0]);
   };
-  const createCategory = async (e) => {
+  //   const handleChange = (file) => {
+  //     setImage(file[0]);
+  //   };
+  useEffect(() => {
+    fetchCategory();
+  }, []);
+
+  const fetchCategory = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/Admin/Categories/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      const { Name, NumberProducts, Image } = response.data.Category;
+      setName(Name);
+      setNumberProducts(NumberProducts);
+      setImage(Image);
+    } catch (error) {
+      console.error(
+        "Error fetching category:",
+        error.response?.data?.message || error.message
+      );
+    }
+  };
+
+  const UpdateCategory = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("_method", "PATCH");
@@ -46,32 +54,93 @@ export default function EditCategory() {
     if (Image !== null) {
       formData.append("Image", Image);
     }
-    await axios
-      .post("http://127.0.0.1:8000/api/Categories", formData)
-      .then(({ data }) => {
-        console.log(data.status);
-        console.log("Ok");
-        navigate("/Admin/Categories");
-      })
-      .catch(({ response }) => {
-        if (response.status === 442) {
-          console.log(response.data.errors);
-          console.log("Error 442 ");
-        } else {
-          console.log("Error");
-          console.log(response.data);
-          setError(response.data.errors);
+    try {
+      const response = await axios.post(
+        `http://127.0.0.1:8000/api/Admin/Categories/${id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
-      });
+      );
+      navigate("/Admin/Categories");
+    } catch (error) {
+      console.error(
+        "Error creating/updating category:",
+        error.response?.data?.message || error.message
+      );
+      if (error.response && error.response.status === 422) {
+        console.log("Validation errors:", error.response.data.errors);
+        setError(error.response.data.errors);
+      } else {
+        console.log("Other error messages:", error.response?.data?.messages);
+        console.log("Error");
+      }
+    }
   };
+
+  // useEffect(() => {
+  //   fetchCategory();
+  // }, []);
+  // const fetchCategory = async () => {
+  //   await axios
+  //     .get(`http://127.0.0.1:8000/api/Admin/Categories/${id}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${auth.token}`,
+  //       },
+  //     })
+  //     .then(({ data }) => {
+  //       const { Name, NumberProducts, Image } = data.Category;
+  //       setName(Name);
+  //       setNumberProducts(NumberProducts);
+  //       setImage(Image);
+  //     })
+  //     .catch(({ response: { data } }) => {
+  //       console.log(data.message);
+  //     });
+  // };
+
+  // const createCategory = async (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData();
+  //   formData.append("_method", "PATCH");
+  //   formData.append("Name", Name);
+  //   formData.append("NumberProducts", NumberProducts);
+  //   if (Image !== null) {
+  //     formData.append("Image", Image);
+  //   }
+  //   await axios
+  //     .post("http://127.0.0.1:8000/api/Admin/Categories", formData, {
+  //       headers: {
+  //         Authorization: `Bearer ${auth.token}`,
+  //       },
+  //     })
+  //     .then(({ data }) => {
+  //       console.log(data.status);
+  //       console.log("Ok");
+  //       navigate("/Admin/Categories");
+  //     })
+  //     .catch(({ response }) => {
+  //       if (response.status === 442) {
+  //         console.log(response.data.errors);
+  //         console.log("Error 442 ");
+  //       } else {
+  //         console.log("Error");
+  //         console.log(response.data);
+  //         setError(response.data.errors);
+  //       }
+  //     });
+  // };
 
   return (
     <>
       <div className="p-5 mt-10 bg-white rounded-2xl shadow-xl">
         <p className="text-center text-5xl border-b-4 border-green-600 pb-2 mb-10">
-          Category New
+          Edit Category
         </p>
-        <form onSubmit={createCategory} encType="multipart/form-data">
+        <form onSubmit={UpdateCategory} encType="multipart/form-data">
           <div>
             <div className="mb-5 flex">
               <div className="w-3/5 mr-2">

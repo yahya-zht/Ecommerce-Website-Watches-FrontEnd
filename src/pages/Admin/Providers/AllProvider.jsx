@@ -2,39 +2,100 @@ import React, { useEffect, useState } from "react";
 import NavSectionAdmin from "../../../components/Admin/NavSectionAdmin";
 import axios from "axios";
 import {
-  faEye,
+  // faEye,
   faPenToSquare,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function AllProviders() {
   const [Providers, setProviders] = useState([]);
+  const auth = useAuth();
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/Providers")
-      .then((response) => response.json())
-      .then((data) => setProviders(data.Providers));
+    fetchProviders();
   }, []);
 
-  const fetchProducts = async () => {
-    await axios
-      .get("http://127.0.0.1:8000/api/Providers")
-      .then(({ data }) => setProviders(data.Providers));
-  };
-  const deleteProvider = async (id) => {
-    if (window.confirm("Are you sure you want to delete this product?")) {
-      await axios
-        .delete(`http://127.0.0.1:8000/api/Providers/${id}`)
-        .then(({ data }) => {
-          console.log(data.message);
-          fetchProducts();
-        })
-        .catch(({ response: { data } }) => {
-          console.log(data.message);
-        });
+  const fetchProviders = async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/Admin/Providers",
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      setProviders(response.data.Providers);
+    } catch (error) {
+      console.error(
+        "Error fetching providers:",
+        error.response?.data?.message || error.message
+      );
     }
   };
+
+  const deleteProvider = async (id) => {
+    if (window.confirm("Are you sure you want to delete this provider?")) {
+      try {
+        const response = await axios.delete(
+          `http://127.0.0.1:8000/api/Admin/Providers/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          }
+        );
+
+        console.log(response.data.message);
+        fetchProviders();
+      } catch (error) {
+        console.error(
+          "Error deleting provider:",
+          error.response?.data?.message || error.message
+        );
+      }
+    }
+  };
+
+  // useEffect(() => {
+  //   fetch("http://127.0.0.1:8000/api/Admin/Providers", {
+  //     headers: {
+  //       Authorization: `Bearer ${auth.token}`,
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => setProviders(data.Providers));
+  // }, []);
+
+  // const fetchProducts = async () => {
+  //   await axios
+  //     .get("http://127.0.0.1:8000/api/Admin/Providers", {
+  //       headers: {
+  //         Authorization: `Bearer ${auth.token}`,
+  //       },
+  //     })
+  //     .then(({ data }) => setProviders(data.Providers));
+  // };
+  // const deleteProvider = async (id) => {
+  //   if (window.confirm("Are you sure you want to delete this product?")) {
+  //     await axios
+  //       .delete(`http://127.0.0.1:8000/api/Admin/Providers/${id}`, {
+  //         headers: {
+  //           Authorization: `Bearer ${auth.token}`,
+  //         },
+  //       })
+  //       .then(({ data }) => {
+  //         console.log(data.message);
+  //         fetchProducts();
+  //       })
+  //       .catch(({ response: { data } }) => {
+  //         console.log(data.message);
+  //       });
+  //   }
+  // };
   const ShowProviders = Providers.map((Provider) => (
     <tr
       className="bg-white text-sm dark:bg-gray-800 hover:bg-amber-50 dark:hover:bg-gray-600"

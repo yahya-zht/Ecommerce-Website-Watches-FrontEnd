@@ -3,36 +3,91 @@ import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleLeft, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function ShowOrder() {
   const { id } = useParams();
   const [Order, setOrder] = useState([]);
+  const auth = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
     fetchOrder();
-    console.log("okokok");
   }, []);
+
   const fetchOrder = async () => {
-    await axios
-      .get(`http://127.0.0.1:8000/api/Orders/${id}`)
-      .then(({ data }) => {
-        console.log(data.Order.products);
-        setOrder(data.Order);
-      });
-  };
-  const deleteOrder = async (id) => {
-    if (window.confirm("Are you sure you want to delete this Order?")) {
-      await axios
-        .delete(`http://127.0.0.1:8000/api/Orders/${id}`)
-        .then(({ data }) => {
-          console.log(data.message);
-          navigate("/Admin/Orders");
-        })
-        .catch(({ response: { data } }) => {
-          console.log(data.message);
-        });
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/Admin/Orders/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      setOrder(response.data.Order);
+    } catch (error) {
+      console.error(
+        "Error fetching order:",
+        error.response?.data?.message || error.message
+      );
     }
   };
+
+  const deleteOrder = async (id) => {
+    if (window.confirm("Are you sure you want to delete this order?")) {
+      try {
+        const response = await axios.delete(
+          `http://127.0.0.1:8000/api/Admin/Orders/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          }
+        );
+
+        console.log(response.data.message);
+        navigate("/Admin/Orders");
+      } catch (error) {
+        console.error(
+          "Error deleting order:",
+          error.response?.data?.message || error.message
+        );
+      }
+    }
+  };
+
+  // useEffect(() => {
+  //   fetchOrder();
+  // }, []);
+  // const fetchOrder = async () => {
+  //   await axios
+  //     .get(`http://127.0.0.1:8000/api/Admin/Orders/${id}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${auth.token}`,
+  //       },
+  //     })
+  //     .then(({ data }) => {
+  //       setOrder(data.Order);
+  //     });
+  // };
+  // const deleteOrder = async (id) => {
+  //   if (window.confirm("Are you sure you want to delete this Order?")) {
+  //     await axios
+  //       .delete(`http://127.0.0.1:8000/api/Admin/Orders/${id}`, {
+  //         headers: {
+  //           Authorization: `Bearer ${auth.token}`,
+  //         },
+  //       })
+  //       .then(({ data }) => {
+  //         console.log(data.message);
+  //         navigate("/Admin/Orders");
+  //       })
+  //       .catch(({ response: { data } }) => {
+  //         console.log(data.message);
+  //       });
+  //   }
+  // };
   const dateCreate = new Date(Order.updated_at);
   const yearCreate = dateCreate.getFullYear();
   const monthCreate = dateCreate.getMonth() + 1;
@@ -43,18 +98,18 @@ export default function ShowOrder() {
       <nav className="rounded-xl p-3 mb-2 shadow-xl bg-white">
         <div className="flex flex-col">
           <div className="flex justify-between">
-            <p>
-              <div className="m-2 ">
+            <div>
+              <p className="m-2 ">
                 <Link
                   to={`/Admin/Orders`}
                   className="text-2xl  flex items-center text-amber-500  hover:text-red-600 "
                 >
                   <FontAwesomeIcon icon={faCircleLeft} />
                 </Link>
-              </div>
-            </p>
-            <p>
-              <div className="m-2">
+              </p>
+            </div>
+            <div>
+              <p className="m-2">
                 <Link
                   onClick={() => deleteOrder(Order.id)}
                   to="#"
@@ -62,8 +117,8 @@ export default function ShowOrder() {
                 >
                   <FontAwesomeIcon icon={faTrash} />
                 </Link>
-              </div>
-            </p>
+              </p>
+            </div>
           </div>
           <div className="flex flex-col font-medium">
             <div className="flex justify-between">
@@ -136,32 +191,38 @@ export default function ShowOrder() {
             </tr>
           </thead>
           <tbody>
-            {Order.products
-              ? Order.products.map((Product) => (
-                  <tr
-                    className="bg-white text-sm dark:bg-gray-800 text-center hover:bg-amber-50 dark:hover:bg-gray-600"
-                    key={Product.id}
+            {Order.products ? (
+              Order.products.map((Product) => (
+                <tr
+                  className="bg-white text-sm dark:bg-gray-800 text-center hover:bg-amber-50 dark:hover:bg-gray-600"
+                  key={Product.id}
+                >
+                  <th
+                    scope="row"
+                    className="font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    <th
-                      scope="row"
-                      className="font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      <div className="w-full h-20 m-auto flex justify-center items-center">
-                        <img
-                          className="max-w-12 h-min"
-                          src={`http://127.0.0.1:8000/Storage/Images/product/${Product.Image_Product}`}
-                          alt=""
-                        />
-                      </div>
-                    </th>
-                    <td className=" ">{Product.Name}</td>
-                    <td className=" ">{Product.Ref}</td>
-                    <td className=" ">{Product.Price_Sale}</td>
-                    <td className=" ">{Product.pivot.Quantity}</td>
-                    <td className=" ">{Product.pivot.Total_Price}</td>
-                  </tr>
-                ))
-              : "Loading"}
+                    <div className="w-full h-20 m-auto flex justify-center items-center">
+                      <img
+                        className="max-w-12 h-min"
+                        src={`http://127.0.0.1:8000/Storage/Images/product/${Product.Image_Product}`}
+                        alt=""
+                      />
+                    </div>
+                  </th>
+                  <td className=" ">{Product.Name}</td>
+                  <td className=" ">{Product.Ref}</td>
+                  <td className=" ">{Product.Price_Sale}</td>
+                  <td className=" ">{Product.pivot.Quantity}</td>
+                  <td className=" ">{Product.pivot.Total_Price}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="text-center">
+                  Loading...
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

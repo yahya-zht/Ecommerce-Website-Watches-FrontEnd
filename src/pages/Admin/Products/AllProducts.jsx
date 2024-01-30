@@ -8,26 +8,64 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import NavSectionAdmin from "../../../components/Admin/NavSectionAdmin";
 import axios from "axios";
-
+import { useAuth } from "../../../context/AuthContext";
 export default function AllProducts() {
+  const auth = useAuth();
   const [Products, setProducts] = useState([]);
+  // useEffect(() => {
+  //   fetch("http://127.0.0.1:8000/api/Admin/Products", {
+  //     headers: {
+  //       Authorization: `Bearer ${auth.token}`,
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     // .then((data) => console.log(data))
+  //     .then((data) => console.log(data.Products))
+  //     // .then((response) => console.log(response))
+  //     .then((data) => setProducts(data.Products));
+  //   // .then((data) => setProviders(data.Providers));
+  // }, []);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/Products")
-      .then((response) => response.json())
-      // .then((data) => console.log(data.Providers))
-      .then((data) => setProducts(data.Products));
-    // .then((data) => setProviders(data.Providers));
-  }, []);
+    fetch("http://127.0.0.1:8000/api/Admin/Products", {
+      headers: {
+        Authorization: `Bearer ${auth.token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data && data.Products) {
+          setProducts(data.Products);
+        } else {
+          throw new Error("Products data not found in the response");
+        }
+      })
+      .catch((err) => setError(err.message));
+  }, [auth.token]);
 
   const fetchProducts = async () => {
     await axios
-      .get("http://127.0.0.1:8000/api/Products")
+      .get("http://127.0.0.1:8000/api/Admin/Products", {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      })
       .then(({ data }) => setProducts(data.Products));
   };
   const deleteProducts = async (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       await axios
-        .delete(`http://127.0.0.1:8000/api/Products/${id}`)
+        .delete(`http://127.0.0.1:8000/api/Admin/Products/${id}`, {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        })
         .then(({ data }) => {
           console.log(data.message);
           fetchProducts();
@@ -48,7 +86,7 @@ export default function AllProducts() {
         </div> */}
         <div className="w-20 h-20 flex justify-center items-center">
           <img
-            class="w-12 h-min"
+            className="w-12 h-min"
             src={`http://127.0.0.1:8000/Storage/Images/product/${product.Image_Product}`}
             alt=""
           />
@@ -102,6 +140,7 @@ export default function AllProducts() {
   return (
     <>
       <nav className="rounded-xl p-3 mb-2 shadow-xl bg-white">
+        <h1>Welcome! {auth.user ? auth.user : "ok"}</h1>
         <NavSectionAdmin href="Create" Link="Add Product" />
       </nav>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">

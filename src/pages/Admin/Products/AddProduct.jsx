@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function AddProduct() {
   const navigate = useNavigate();
@@ -16,27 +17,40 @@ export default function AddProduct() {
   const [Quantier, setQuantier] = useState();
   const [Provider, setProvider] = useState();
   const [Providers, setProviders] = useState([]);
-  const [Sales, setSales] = useState();
+  const [Sales, setSales] = useState(0);
   const [Error, setError] = useState([]);
+  const auth = useAuth();
+
   const handleChange = (file) => {
     setImage(file[0]);
   };
-  // const changeHandler = (e) => {
-  //   setImage({ image: e.target.files[0] });
-  //   console.log(e.target.files[0]);
-  // };
   useEffect(() => {
     fetchProviders();
   }, []);
+
   const fetchProviders = async () => {
-    await axios.get("http://127.0.0.1:8000/api/Providers").then(({ data }) => {
-      // console.log(data.Providers);
-      setProviders(data.Providers);
-    });
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/Admin/Providers",
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      setProviders(response.data.Providers);
+    } catch (error) {
+      console.error(
+        "Error fetching providers:",
+        error.response?.data?.message || error.message
+      );
+      // Handle error appropriately, e.g., show an error message to the user
+    }
   };
-  // console.log(Providers);
   const createProduct = async (e) => {
     e.preventDefault();
+
     const formData = new FormData();
     formData.append("Ref", Ref);
     formData.append("Name", Name);
@@ -48,24 +62,83 @@ export default function AddProduct() {
     formData.append("Quantity", Quantier);
     formData.append("Sales", Sales);
     formData.append("provider_id", Provider);
-    await axios
-      .post("http://127.0.0.1:8000/api/Products", formData)
-      .then(({ data }) => {
-        console.log(data.status);
-        console.log("Ok");
-        navigate("/Admin/Products");
-      })
-      .catch(({ response }) => {
-        if (response.status === 442) {
-          console.log(response.data.errors);
-          console.log("Error 442 ");
-        } else {
-          console.log("Error");
-          console.log(response.data);
-          setError(response.data.errors);
+
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/Admin/Products",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+            "Content-Type": "multipart/form-data", // Set the content type for FormData
+          },
         }
-      });
+      );
+
+      console.log(response.data.status);
+      console.log("Product created successfully");
+      navigate("/Admin/Products");
+    } catch (error) {
+      console.error(
+        "Error creating product:",
+        error.response?.data || error.message
+      );
+
+      if (error.response && error.response.status === 422) {
+        console.log("Validation errors:", error.response.data.errors);
+        setError(error.response.data.errors);
+      } else {
+        console.log("Other error messages:", error.response?.data?.messages);
+        console.log("Error");
+      }
+    }
   };
+
+  // useEffect(() => {
+  //   fetchProviders();
+  // }, []);
+  // const fetchProviders = async () => {
+  //   await axios
+  //     .get("http://127.0.0.1:8000/api/Admin/Providers")
+  //     .then(({ data }) => {
+  //       setProviders(data.Providers);
+  //     });
+  // };
+  // const createProduct = async (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData();
+  //   formData.append("Ref", Ref);
+  //   formData.append("Name", Name);
+  //   formData.append("Image_Product", Image);
+  //   formData.append("Description", Description);
+  //   formData.append("Price_Purchase", PricePur);
+  //   formData.append("Price_Sale", PriceSal);
+  //   formData.append("Price_First", PriceOld);
+  //   formData.append("Quantity", Quantier);
+  //   formData.append("Sales", Sales);
+  //   formData.append("provider_id", Provider);
+  //   await axios
+  //     .post("http://127.0.0.1:8000/api/Admin/Products", formData, {
+  //       headers: {
+  //         Authorization: `Bearer ${auth.token}`,
+  //       },
+  //     })
+  //     .then(({ data }) => {
+  //       console.log(data.status);
+  //       console.log("Ok");
+  //       navigate("/Admin/Products");
+  //     })
+  //     .catch(({ response }) => {
+  //       if (response.status === 442) {
+  //         console.log(response.data.errors);
+  //         console.log("Error 442 ");
+  //       } else {
+  //         console.log("Error");
+  //         console.log(response.data);
+  //         setError(response.data.errors);
+  //       }
+  //     });
+  // };
 
   return (
     <>

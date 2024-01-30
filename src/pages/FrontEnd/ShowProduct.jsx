@@ -9,13 +9,16 @@ export default function ShowProduct() {
   const { id } = useParams();
   const [Product, setProduct] = useState([]);
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/Products/${id}`)
+    fetch(`http://127.0.0.1:8000/api/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         setProduct(data.product);
         console.log(data.product);
+        // console.log("Product 2 =>", Product);
       });
   }, [id]);
+  // console.log("Product 1 =>", Product[0].Name);
 
   return (
     <div>

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function EditCustomer() {
   const { id } = useParams();
@@ -13,52 +14,128 @@ export default function EditCustomer() {
   const [City, setCity] = useState("");
   const [Country, setCountry] = useState("");
   const [Error, setError] = useState([]);
+  const auth = useAuth();
   useEffect(() => {
     fetchCustomer();
   }, []);
+
   const fetchCustomer = async () => {
-    await axios
-      .get(`http://127.0.0.1:8000/api/Customers/${id}`)
-      .then(({ data }) => {
-        console.log(data);
-        const { name, telephone, email, City, Country } = data.Customer;
-        setName(name);
-        setTelephone(telephone);
-        setEmail(email);
-        setCity(City);
-        setCountry(Country);
-      })
-      .catch(({ response: { data } }) => {
-        console.log(data.message);
-      });
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/Admin/Customers/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      const { name, telephone, email, City, Country } = response.data.Customer;
+      setName(name);
+      setTelephone(telephone);
+      setEmail(email);
+      setCity(City);
+      setCountry(Country);
+    } catch (error) {
+      console.error(
+        "Error fetching customer:",
+        error.response?.data?.message || error.message
+      );
+    }
   };
 
   const createCustomer = async (e) => {
     e.preventDefault();
+
     const formData = new FormData();
     formData.append("name", Name);
     formData.append("telephone", Telephone);
     formData.append("email", Email);
     formData.append("City", City);
     formData.append("Country", Country);
-    await axios
-      .post("http://127.0.0.1:8000/api/Customers", formData)
-      .then(({ data }) => {
-        console.log(data.status);
-        console.log("Ok");
-        navigate("/Admin/Customers");
-      })
-      .catch(({ response }) => {
-        if (response.status === 442) {
-          console.log(response.data.errors);
-          console.log("Error 442 ");
-        } else {
-          console.log("Error");
-          console.log(response.data);
-          setError(response.data.errors);
+
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/Admin/Customers",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+            "Content-Type": "multipart/form-data", // Set the content type for FormData
+          },
         }
-      });
+      );
+
+      navigate("/Admin/Customers");
+    } catch (error) {
+      console.error(
+        "Error creating customer:",
+        error.response?.data?.message || error.message
+      );
+
+      if (error.response && error.response.status === 442) {
+        console.log("Validation errors:", error.response.data.errors);
+        console.log("Error 442");
+        setError(error.response.data.errors);
+      } else {
+        console.log("Other error messages:", error.response?.data);
+        console.log("Error");
+      }
+    }
   };
+
+  // useEffect(() => {
+  //   fetchCustomer();
+  // }, []);
+  // const fetchCustomer = async () => {
+  //   await axios
+  //     .get(`http://127.0.0.1:8000/api/Admin/Customers/${id}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${auth.token}`,
+  //       },
+  //     })
+  //     .then(({ data }) => {
+  //       console.log(data);
+  //       const { name, telephone, email, City, Country } = data.Customer;
+  //       setName(name);
+  //       setTelephone(telephone);
+  //       setEmail(email);
+  //       setCity(City);
+  //       setCountry(Country);
+  //     })
+  //     .catch(({ response: { data } }) => {
+  //       console.log(data.message);
+  //     });
+  // };
+
+  // const createCustomer = async (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData();
+  //   formData.append("name", Name);
+  //   formData.append("telephone", Telephone);
+  //   formData.append("email", Email);
+  //   formData.append("City", City);
+  //   formData.append("Country", Country);
+  //   await axios
+  //     .post("http://127.0.0.1:8000/api/Admin/Customers", formData, {
+  //       headers: {
+  //         Authorization: `Bearer ${auth.token}`,
+  //       },
+  //     })
+  //     .then(({ data }) => {
+  //       navigate("/Admin/Customers");
+  //     })
+  //     .catch(({ response }) => {
+  //       if (response.status === 442) {
+  //         console.log(response.data.errors);
+  //         console.log("Error 442 ");
+  //       } else {
+  //         console.log("Error");
+  //         console.log(response.data);
+  //         setError(response.data.errors);
+  //       }
+  //     });
+  // };
 
   return (
     <>

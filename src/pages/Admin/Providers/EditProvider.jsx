@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function EditProvider() {
   const { id } = useParams();
@@ -15,28 +16,39 @@ export default function EditProvider() {
   const [City, setCity] = useState();
   const [Country, setCountry] = useState();
   const [Error, setError] = useState([]);
+  const auth = useAuth();
   useEffect(() => {
     fetchProvider();
   }, []);
+
   const fetchProvider = async () => {
-    await axios
-      .get(`http://127.0.0.1:8000/api/Providers/${id}`)
-      .then(({ data }) => {
-        console.log(data);
-        const { Name, Ref, Email, Telephone, Address, City, Country } =
-          data.Provider;
-        setName(Name);
-        setRef(Ref);
-        setEmail(Email);
-        setTelephone(Telephone);
-        setAddress(Address);
-        setCity(City);
-        setCountry(Country);
-      })
-      .catch(({ response: { data } }) => {
-        console.log(data.message);
-      });
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/Admin/Providers/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      const { Name, Ref, Email, Telephone, Address, City, Country } =
+        response.data.Provider;
+      setName(Name);
+      setRef(Ref);
+      setEmail(Email);
+      setTelephone(Telephone);
+      setAddress(Address);
+      setCity(City);
+      setCountry(Country);
+    } catch (error) {
+      console.error(
+        "Error fetching provider:",
+        error.response?.data?.message || error.message
+      );
+    }
   };
+
   const EditProvider = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -48,23 +60,96 @@ export default function EditProvider() {
     formData.append("Address", Address);
     formData.append("City", City);
     formData.append("Country", Country);
-    await axios
-      .post(`http://127.0.0.1:8000/api/Providers/${id}`, formData)
-      .then(({ data }) => {
-        console.log(data.status);
-        navigate("/Admin/Providers");
-      })
-      .catch(({ response }) => {
-        if (response.status === 442) {
-          console.log(response.data.errors);
-          console.log("Error 442 ");
-        } else {
-          console.log("Error");
-          console.log(response.data);
-          setError(response.data.errors);
+
+    try {
+      const response = await axios.post(
+        `http://127.0.0.1:8000/api/Admin/Providers/${id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
         }
-      });
+      );
+
+      console.log("Provider updated successfully:", response.data.status);
+      navigate("/Admin/Providers");
+    } catch (error) {
+      console.error(
+        "Error updating provider:",
+        error.response?.data || error.message
+      );
+
+      if (error.response) {
+        console.log("Validation errors:", error.response.data.errors);
+        setError(error.response.data.errors);
+      } else if (error.response.status === 442) {
+        console.log("errors: 442");
+      } else {
+        console.log("Other error:", error.response?.data);
+        setError("An error occurred while updating the provider.");
+      }
+    }
   };
+
+  // useEffect(() => {
+  //   fetchProvider();
+  // }, []);
+  // const fetchProvider = async () => {
+  //   await axios
+  //     .get(`http://127.0.0.1:8000/api/Admin/Providers/${id}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${auth.token}`,
+  //       },
+  //     })
+  //     .then(({ data }) => {
+  //       console.log(data);
+  //       const { Name, Ref, Email, Telephone, Address, City, Country } =
+  //         data.Provider;
+  //       setName(Name);
+  //       setRef(Ref);
+  //       setEmail(Email);
+  //       setTelephone(Telephone);
+  //       setAddress(Address);
+  //       setCity(City);
+  //       setCountry(Country);
+  //     })
+  //     .catch(({ response: { data } }) => {
+  //       console.log(data.message);
+  //     });
+  // };
+  // const EditProvider = async (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData();
+  //   formData.append("_method", "PATCH");
+  //   formData.append("Ref", Ref);
+  //   formData.append("Name", Name);
+  //   formData.append("Email", Email);
+  //   formData.append("Telephone", Telephone);
+  //   formData.append("Address", Address);
+  //   formData.append("City", City);
+  //   formData.append("Country", Country);
+  //   await axios
+  //     .post(`http://127.0.0.1:8000/api/Admin/Providers/${id}`, formData, {
+  //       headers: {
+  //         Authorization: `Bearer ${auth.token}`,
+  //       },
+  //     })
+  //     .then(({ data }) => {
+  //       console.log(data.status);
+  //       navigate("/Admin/Providers");
+  //     })
+  //     .catch(({ response }) => {
+  //       if (response.status === 442) {
+  //         console.log(response.data.errors);
+  //         console.log("Error 442 ");
+  //       } else {
+  //         console.log("Error");
+  //         console.log(response.data);
+  //         setError(response.data.errors);
+  //       }
+  //     });
+  // };
 
   return (
     <>

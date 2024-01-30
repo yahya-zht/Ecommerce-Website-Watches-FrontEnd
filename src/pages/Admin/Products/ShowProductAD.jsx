@@ -7,28 +7,39 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function ShowProductAD() {
+  const auth = useAuth();
   const { id } = useParams();
   const [product, setProduct] = useState([]);
   const navigate = useNavigate();
-
   useEffect(() => {
-    fetchProducts();
-    console.log("okokok");
-  }, []);
-  const fetchProducts = async () => {
-    await axios
-      .get(`http://127.0.0.1:8000/api/Products/${id}`)
-      .then(({ data }) => {
-        console.log(data.product);
-        setProduct(data.product);
-      });
-  };
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/Admin/Products/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          }
+        );
+
+        const { product } = response.data;
+        setProduct(product);
+      } catch (error) {
+        console.error("Error fetching product:", error);
+        // Handle error appropriately, e.g., show an error message to the user
+      }
+    };
+
+    fetchProduct();
+  }, [id, auth.token]);
   const deleteProducts = async (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       await axios
-        .delete(`http://127.0.0.1:8000/api/Products/${id}`)
+        .delete(`http://127.0.0.1:8000/api/Admin/Products/${id}`)
         .then(({ data }) => {
           console.log(data.message);
           // fetchProducts();
@@ -39,8 +50,6 @@ export default function ShowProductAD() {
         });
     }
   };
-  // const created_at = product.created_at;
-  // const updated_at = product.updated_at;
   const dateCreate = new Date(product.created_at);
   const dateEdit = new Date(product.updated_at);
   const yearCreate = dateCreate.getFullYear();
@@ -55,7 +64,9 @@ export default function ShowProductAD() {
   return (
     <div className="flex p-4 items-center bg-white rounded-xl shadow-xl mt-10">
       <div className="flex w-4/5 flex-col justify-between m-5 font-semibold text-2xl">
-        <p className="mb-6">Name Product :{product.Name} </p>
+        <p className="mb-6">
+          Name Product :{product.Name ? product.Name : "Name"}
+        </p>
         <p className="mb-6">Ref : {product.Ref} </p>
         <p className="mb-6">Description : {product.Description}</p>
         <div className="flex mb-6">
@@ -100,7 +111,11 @@ export default function ShowProductAD() {
       <div className="w-1/5">
         <div className="">
           <img
-            src={`http://127.0.0.1:8000/Storage/Images/product/${product.Image_Product}`}
+            src={
+              product.Image_Product
+                ? `http://127.0.0.1:8000/Storage/Images/product/${product.Image_Product}`
+                : "Image"
+            }
             alt=""
           />
         </div>

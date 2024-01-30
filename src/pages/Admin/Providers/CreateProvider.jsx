@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function CreateProvider() {
   const navigate = useNavigate();
@@ -13,8 +14,8 @@ export default function CreateProvider() {
   const [Address, setAddress] = useState("");
   const [City, setCity] = useState();
   const [Country, setCountry] = useState();
-  const [Error, setError] = useState([]);
-
+  const [error, seterror] = useState([]);
+  const auth = useAuth();
   const createProvider = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -25,24 +26,68 @@ export default function CreateProvider() {
     formData.append("Address", Address);
     formData.append("City", City);
     formData.append("Country", Country);
-    await axios
-      .post("http://127.0.0.1:8000/api/Providers", formData)
-      .then(({ data }) => {
-        console.log(data.status);
-        console.log("Ok");
-        navigate("/Admin/Providers");
-      })
-      .catch(({ response }) => {
-        if (response.status === 442) {
-          console.log(response.data.errors);
-          console.log("Error 442 ");
-        } else {
-          console.log("Error");
-          console.log(response.data);
-          setError(response.data.errors);
+
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/Admin/Providers",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
         }
-      });
+      );
+
+      console.log("Provider created successfully:", response.data.status);
+      navigate("/Admin/Providers");
+    } catch (error) {
+      console.error(
+        "error creating provider:",
+        error.response?.data || error.message
+      );
+
+      if (error.response) {
+        console.log("Validation errors:", error.response.data.errors);
+        seterror(error.response.data.errors);
+      } else if (error.response.status === 442) {
+        console.log("error: 442 ");
+      } else {
+        console.log("Other error:", error.response?.data);
+        seterror("An error occurred while creating the provider.");
+      }
+    }
   };
+
+  // const createProvider = async (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData();
+  //   formData.append("Ref", Ref);
+  //   formData.append("Name", Name);
+  //   formData.append("Email", Email);
+  //   formData.append("Telephone", Telephone);
+  //   formData.append("Address", Address);
+  //   formData.append("City", City);
+  //   formData.append("Country", Country);
+  //   await axios
+  //     .post("http://127.0.0.1:8000/api/Admin/Providers", formData, {
+  //       headers: {
+  //         Authorization: `Bearer ${auth.token}`,
+  //       },
+  //     })
+  //     .then(({ data }) => {
+  //       console.log(data.status);
+  //       console.log("Ok");
+  //       navigate("/Admin/Providers");
+  //     })
+  //     .catch(({ response }) => {
+  //       if (response.status === 442) {
+  //         console.log(response.data.errors);
+  //       } else {
+  //         console.log(response.data);
+  //         seterror(response.data.errors);
+  //       }
+  //     });
+  // };
 
   return (
     <>
@@ -69,8 +114,8 @@ export default function CreateProvider() {
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 />
                 <div>
-                  {Error && (
-                    <p className="text-red-500 text-sm italic">{Error.Name}</p>
+                  {error && (
+                    <p className="text-red-500 text-sm italic">{error.Name}</p>
                   )}
                 </div>
               </div>
@@ -91,8 +136,8 @@ export default function CreateProvider() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
               <div>
-                {Error && (
-                  <p className="text-red-500 text-sm italic">{Error.Ref}</p>
+                {error && (
+                  <p className="text-red-500 text-sm italic">{error.Ref}</p>
                 )}
               </div>
             </div>
@@ -112,8 +157,8 @@ export default function CreateProvider() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
               <div>
-                {Error && (
-                  <p className="text-red-500 text-sm italic">{Error.Email}</p>
+                {error && (
+                  <p className="text-red-500 text-sm italic">{error.Email}</p>
                 )}
               </div>
             </div>
@@ -133,9 +178,9 @@ export default function CreateProvider() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
               <div>
-                {Error && (
+                {error && (
                   <p className="text-red-500 text-sm italic">
-                    {Error.Telephone}
+                    {error.Telephone}
                   </p>
                 )}
               </div>
@@ -156,8 +201,8 @@ export default function CreateProvider() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
               <div>
-                {Error && (
-                  <p className="text-red-500 text-sm italic">{Error.Address}</p>
+                {error && (
+                  <p className="text-red-500 text-sm italic">{error.Address}</p>
                 )}
               </div>
             </div>
@@ -178,8 +223,8 @@ export default function CreateProvider() {
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 />
                 <div>
-                  {Error && (
-                    <p className="text-red-500 text-sm italic">{Error.City}</p>
+                  {error && (
+                    <p className="text-red-500 text-sm italic">{error.City}</p>
                   )}
                 </div>
               </div>
@@ -201,9 +246,9 @@ export default function CreateProvider() {
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 />
                 <div>
-                  {Error && (
+                  {error && (
                     <p className="text-red-500 text-sm italic">
-                      {Error.Country}
+                      {error.Country}
                     </p>
                   )}
                 </div>

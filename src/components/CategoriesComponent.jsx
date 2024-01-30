@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CategoriesCard } from "./Cards/CategoriesCard";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 // import Image01 from "../assets/image/pexels-antony-trivet-9979735.jpg";
 // import Image02 from "../assets/image/pexels-antony-trivet-9981078.jpg";
 // import Image03 from "../assets/image/pexels-antony-trivet-9878594.jpg";
@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 export default function CategoriesComponent() {
   const [Categories, setCategories] = useState([]);
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/Categories")
+    fetch("http://127.0.0.1:8000/api/categories")
       .then((res) => res.json())
       .then((data) => {
         console.log("Data : ", data.Categories);
