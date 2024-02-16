@@ -12,7 +12,7 @@ export default function Payment() {
   const [Error, setError] = useState([]);
   // const [TotalOrder, setTotalOrder] = useState(0);
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/Products")
+    fetch("http://127.0.0.1:8000/api/products")
       .then((response) => response.json())
       .then((data) => setProductss(data.Products));
   }, []);
@@ -31,7 +31,7 @@ export default function Payment() {
     return total + (item?.Price_Sale || 0) * cartItems.quantity;
   }, 0);
   // console.log(TotalProduct);
-  // console.log(TotalOrder);
+  console.log(TotalOrder);
   // console.log(cartItems);
 
   const [Name, setName] = useState("");
@@ -61,7 +61,7 @@ export default function Payment() {
     //   console.log(pair[0] + ", " + pair[1]);
     // }
     await axios
-      .post("http://127.0.0.1:8000/api/Orders", formData)
+      .post("http://127.0.0.1:8000/api/Order", formData)
       .then(({ data }) => {
         // console.log(data.status);
         console.log("Ok");

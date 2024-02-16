@@ -7,7 +7,7 @@ export default function ShoppingCartCompoents() {
   const { cartItems, removeAllItemsFromCart } = useShoppingCart();
   const [Productss, setProductss] = useState([]);
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/Products")
+    fetch("http://127.0.0.1:8000/api/products")
       .then((response) => response.json())
       .then((data) => setProductss(data.Products));
   }, []);
@@ -17,45 +17,45 @@ export default function ShoppingCartCompoents() {
   });
 
   return (
-    <section class=" dark:bg-gray-900 p-3 sm:p-5">
-      <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
-        <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-              <thead class="text-xs text-amber-400 uppercase bg-green-700 dark:bg-gray-700 dark:text-gray-400">
+    <section className=" dark:bg-gray-900 p-3 sm:p-5">
+      <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
+        <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+              <thead className="text-xs text-amber-400 uppercase bg-green-700 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                  <th scope="col" class="px-4 py-3">
+                  <th scope="col" className="px-4 py-3">
                     Product Image
                   </th>
-                  <th scope="col" class="px-4 py-3">
+                  <th scope="col" className="px-4 py-3">
                     Product Name
                   </th>
-                  <th scope="col" class="px-4 py-3">
+                  <th scope="col" className="px-4 py-3">
                     Quantity
                   </th>
-                  <th scope="col" class="px-4 py-3">
+                  <th scope="col" className="px-4 py-3">
                     Price one
                   </th>
-                  <th scope="col" class="px-4 py-3">
+                  <th scope="col" className="px-4 py-3">
                     Total Price
                   </th>
-                  <th scope="col" class="px-4 py-3">
+                  <th scope="col" className="px-4 py-3">
                     Delete
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {Products}
-                <tr class="border-b dark:border-gray-700">
+                <tr className="border-b dark:border-gray-700">
                   <th
                     colSpan={4}
                     scope="row"
-                    class="pl-20 py-3 font-bold  text-black text-xl text-center whitespace-nowrap dark:text-white "
+                    className="pl-20 py-3 font-bold  text-black text-xl text-center whitespace-nowrap dark:text-white "
                   >
                     Total
                   </th>
 
-                  <td class="px-4 py-3 font-bold text-black">
+                  <td className="px-4 py-3 font-bold text-black">
                     {cartItems.reduce((total, cartItems) => {
                       const item = Productss.find((i) => i.id === cartItems.id);
                       return (
@@ -63,7 +63,7 @@ export default function ShoppingCartCompoents() {
                       );
                     }, 0)}
                   </td>
-                  <td class="px-4 py-3">
+                  <td className="px-4 py-3">
                     <button onClick={removeAllItemsFromCart}>Remove All</button>
                   </td>
                 </tr>
