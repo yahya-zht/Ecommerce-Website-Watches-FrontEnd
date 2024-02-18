@@ -34,6 +34,8 @@ import Register from "../pages/Admin/Register";
 import AuthProvider from "../context/AuthContext";
 import PrivateRoute from "./PrivateRoute";
 import EditCategory from "../pages/Admin/Categories/EditCategory";
+import AllMessages from "../pages/Admin/Messages/AllMessages";
+import ShowMessage from "../pages/Admin/Messages/ShowMessage";
 
 export default function Routers() {
   return (
@@ -67,6 +69,8 @@ export default function Routers() {
               <Route path="Providers/Create" element={<CreateProvider />} />
               <Route path="Providers/Edit/:id" element={<EditProvider />} />
               <Route path="Profile" element={<Profile />} />
+              <Route path="Messages" element={<AllMessages />} />
+              <Route path="Messages/Show/:id" element={<ShowMessage />} />
               <Route path="Customers" element={<AllCustomers />} />
               <Route path="Customers/Edit/:id" element={<EditCustomer />} />
               <Route path="Orders" element={<AllOrders />} />

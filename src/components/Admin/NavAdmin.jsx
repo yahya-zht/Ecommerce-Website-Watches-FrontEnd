@@ -99,7 +99,7 @@ export default function NavAdmin() {
           </li>
           <li className="flex ">
             <Link
-              to="Profile"
+              to="Messages"
               className=" hover:text-green-100 rounded-xl w-full p-2 hover:bg-amber-600 focus:text-green-100 focus:bg-amber-600"
             >
               <FontAwesomeIcon icon={faEnvelope} className="mr-2 w-8" />
