@@ -3,6 +3,7 @@ import {
   faEnvelope,
   faGear,
   faLayerGroup,
+  faRightToBracket,
   faShop,
   faTag,
   faUser,
@@ -18,13 +19,13 @@ export default function NavAdmin() {
   const auth = useAuth();
   return (
     <>
-      <div className="flex flex-col ">
+      <div className="flex flex-col  ">
         <ul>
           <li className="border-b-4 border-black">
-            <div className="">
-              <Link to="" className="flex p-2 py-4  cursor-pointer  ">
-                <img src={Logo} className="h-8" alt="Flowbite Logo" />
-                <span className="self-center text-2xl text-yellow-400 font-semibold whitespace-nowrap dark:text-white">
+            <div className="w-full">
+              <Link to="" className="flex p-2 py-4 w-full cursor-pointer  ">
+                <img src={Logo} className="w-1/4 " alt="Logo" />
+                <span className="self-center w-3/4 text-2xl text-yellow-400 font-semibold whitespace-nowrap dark:text-white">
                   WatchesCom
                 </span>
               </Link>
@@ -108,16 +109,24 @@ export default function NavAdmin() {
           </li>
           <li className="flex ">
             <Link
-              to="Profile"
+              to="Setting"
               className=" hover:text-green-100 rounded-xl w-full p-2 hover:bg-amber-600 focus:text-green-100 focus:bg-amber-600"
             >
               <FontAwesomeIcon icon={faGear} className="mr-2 w-8" />
               <span className="font-semibold">Settings</span>
             </Link>
           </li>
+        </ul>
+      </div>
+      <div className="">
+        <ul>
           <li className="flex ">
-            <button onClick={() => auth.logOut()} className="btn-submit">
-              logout
+            <button
+              onClick={() => auth.logOut()}
+              className="btn-submit hover:text-green-100 rounded-xl w-full p-2 hover:bg-red-600 focus:text-green-100 focus:bg-amber-600 "
+            >
+              <FontAwesomeIcon className="mr-3" icon={faRightToBracket} />
+              <span className="font-semibold">logout</span>
             </button>
           </li>
         </ul>

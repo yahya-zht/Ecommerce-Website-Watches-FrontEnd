@@ -7,6 +7,29 @@ const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(localStorage.getItem("user") || "");
   const [token, setToken] = useState(localStorage.getItem("site") || "");
+  // const loginAction = async (data) => {
+  //   try {
+  //     const response = await fetch("http://127.0.0.1:8000/api/login", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(data),
+  //     });
+  //     const res = await response.json();
+  //     if (res.token) {
+  //       console.log("res.user =>  ", res.user);
+  //       setToken(res.token);
+  //       localStorage.setItem("user", res.user.name);
+  //       localStorage.setItem("site", res.token);
+  //       navigate("Admin");
+  //       return;
+  //     }
+  //     throw new Error(res.message);
+  //   } catch (error) {
+  //     console.error("Error =>" + error.message);
+  //   }
+  // };
   const loginAction = async (data) => {
     try {
       const response = await fetch("http://127.0.0.1:8000/api/login", {
@@ -16,22 +39,28 @@ const AuthProvider = ({ children }) => {
         },
         body: JSON.stringify(data),
       });
-      //   console.log("data =>  ", data);
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("Invalid email/username or password");
+        } else {
+          throw new Error(`Server error: ${response.statusText}`);
+        }
+      }
+
       const res = await response.json();
-      //   console.log("res.data =>  ", res.data);
       if (res.token) {
-        // console.log("res.token =>  ", res.token);
         console.log("res.user =>  ", res.user);
-        // setUser(res.user.name);
         setToken(res.token);
         localStorage.setItem("user", res.user.name);
         localStorage.setItem("site", res.token);
-        navigate("Admin/Products");
+        navigate("Admin");
         return;
+      } else {
+        throw new Error("Unexpected response from server");
       }
-      throw new Error(res.message);
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      // console.error("Error:", error.message);
+      return error.message;
     }
   };
 

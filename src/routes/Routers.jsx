@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Home from "../pages/FrontEnd/Home";
 import About from "../pages/FrontEnd/About";
 import Products from "../pages/FrontEnd/Products";
@@ -32,10 +32,11 @@ import CategoriesIndex from "../pages/FrontEnd/CategoriesIndex";
 import Login from "../pages/Admin/Login";
 import Register from "../pages/Admin/Register";
 import AuthProvider from "../context/AuthContext";
-import PrivateRoute from "./PrivateRoute";
+import PrivateRoute, { Loginz } from "./PrivateRoute";
 import EditCategory from "../pages/Admin/Categories/EditCategory";
 import AllMessages from "../pages/Admin/Messages/AllMessages";
 import ShowMessage from "../pages/Admin/Messages/ShowMessage";
+import Setting from "../pages/Admin/Settings/Setting";
 
 export default function Routers() {
   return (
@@ -43,6 +44,7 @@ export default function Routers() {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/Home" element={<Home />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/About" element={<About />} />
           <Route path="/Products" element={<Products />} />
@@ -75,6 +77,7 @@ export default function Routers() {
               <Route path="Customers/Edit/:id" element={<EditCustomer />} />
               <Route path="Orders" element={<AllOrders />} />
               <Route path="Orders/Show/:id" element={<ShowOrder />} />
+              <Route path="Setting" element={<Setting />} />
               <Route path="Register" element={<Register />} />
             </Route>
           </Route>
