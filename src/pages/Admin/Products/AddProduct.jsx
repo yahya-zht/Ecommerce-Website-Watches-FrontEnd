@@ -17,6 +17,9 @@ export default function AddProduct() {
   const [Quantier, setQuantier] = useState();
   const [Provider, setProvider] = useState();
   const [Providers, setProviders] = useState([]);
+  // const [Category, setCategory] = useState([]);
+  const [selectCategories, setSelectCategories] = useState([]);
+  const [Categories, setCategories] = useState([]);
   const [Sales, setSales] = useState(0);
   const [Error, setError] = useState([]);
   const auth = useAuth();
@@ -26,8 +29,21 @@ export default function AddProduct() {
   };
   useEffect(() => {
     fetchProviders();
+    fetchCategories();
   }, []);
 
+  const handleCategoryChange = (e) => {
+    const categoryId = parseInt(e.target.value);
+    const isChecked = e.target.checked;
+
+    if (isChecked) {
+      // If checkbox is checked, add category to selected categories
+      setSelectCategories([...selectCategories, categoryId]);
+    } else {
+      // If checkbox is unchecked, remove category from selected categories
+      setSelectCategories(selectCategories.filter((id) => id !== categoryId));
+    }
+  };
   const fetchProviders = async () => {
     try {
       const response = await axios.get(
@@ -40,6 +56,27 @@ export default function AddProduct() {
       );
 
       setProviders(response.data.Providers);
+    } catch (error) {
+      console.error(
+        "Error fetching providers:",
+        error.response?.data?.message || error.message
+      );
+      // Handle error appropriately, e.g., show an error message to the user
+    }
+  };
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/Admin/Categories",
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      setCategories(response.data.Categories);
+      // console.log(response.data.Categories);
     } catch (error) {
       console.error(
         "Error fetching providers:",
@@ -61,7 +98,11 @@ export default function AddProduct() {
     formData.append("Price_First", PriceOld);
     formData.append("Quantity", Quantier);
     formData.append("Sales", Sales);
+    formData.append("category", Sales);
     formData.append("provider_id", Provider);
+    selectCategories.forEach((categoryId) => {
+      formData.append("categories[]", categoryId);
+    });
 
     try {
       const response = await axios.post(
@@ -363,6 +404,34 @@ export default function AddProduct() {
                     <p className="text-red-500 text-sm italic">{Error.Sales}</p>
                   )}
                 </div>
+              </div>
+            </div>
+            <div>
+              <label
+                htmlFor="base-input"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-3"
+              >
+                Categories
+              </label>
+              <div className="mb-3 flex">
+                {Categories.map((item) => (
+                  <div className="" key={item.id}>
+                    <input
+                      id={item.Name}
+                      name="category[]"
+                      onChange={handleCategoryChange}
+                      value={item.id}
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    />
+                    <label
+                      htmlFor={item.Name}
+                      className="ms-1 mr-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >
+                      {item.Name}
+                    </label>
+                  </div>
+                ))}
               </div>
             </div>
             <div>
