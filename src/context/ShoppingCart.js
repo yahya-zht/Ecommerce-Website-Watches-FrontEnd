@@ -58,6 +58,7 @@ const ShoppingCartProvider = ({ children }) => {
   const removeAllItemsFromCart = () => {
     setCartItems([]);
   };
+
   return (
     <ShoppingCart.Provider
       value={{

@@ -1,38 +1,52 @@
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 export default function AboutComponent() {
+  function about() {
+    document.getElementById("about").style.display = "block";
+    document.getElementById("about-tab").style.color = "goldenrod";
+    document.getElementById("services-tab").style.color = "black";
+    document.getElementById("statistics-tab").style.color = "black";
+    document.getElementById("statistics").style.display = "none";
+    document.getElementById("services").style.display = "none";
+  }
+  function Services() {
+    document.getElementById("services").style.display = "block";
+    document.getElementById("services-tab").style.color = "goldenrod";
+    document.getElementById("statistics-tab").style.color = "black";
+    document.getElementById("about-tab").style.color = "black";
+    document.getElementById("about").style.display = "none";
+    document.getElementById("statistics").style.display = "none";
+  }
+  function Facts() {
+    document.getElementById("statistics").style.display = "block";
+    document.getElementById("statistics-tab").style.color = "goldenrod";
+    document.getElementById("services-tab").style.color = "black";
+    document.getElementById("about-tab").style.color = "black";
+    document.getElementById("about").style.display = "none";
+    document.getElementById("services").style.display = "none";
+  }
+
   return (
     <div className="max-w-screen-xl mx-auto p-4">
       <div className="w-full  m-2">
         <div class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-          <ul
-            class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800"
-            id="defaultTab"
-            data-tabs-toggle="#defaultTabContent"
-            role="tablist"
-          >
+          <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
             <li class="me-2">
               <button
+                onClick={() => about()}
                 id="about-tab"
-                data-tabs-target="#about"
                 type="button"
-                role="tab"
-                aria-controls="about"
-                aria-selected="true"
-                class="inline-block p-4 text-blue-600 rounded-ss-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500"
+                class="inline-block p-4 rounded-ss-lg text-yellow-400 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500"
               >
                 About
               </button>
             </li>
             <li class="me-2">
               <button
+                onClick={() => Services()}
                 id="services-tab"
-                data-tabs-target="#services"
                 type="button"
-                role="tab"
-                aria-controls="services"
-                aria-selected="false"
                 class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300"
               >
                 Services
@@ -40,12 +54,9 @@ export default function AboutComponent() {
             </li>
             <li class="me-2">
               <button
+                onClick={() => Facts()}
                 id="statistics-tab"
-                data-tabs-target="#statistics"
                 type="button"
-                role="tab"
-                aria-controls="statistics"
-                aria-selected="false"
                 class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300"
               >
                 Facts
@@ -54,10 +65,8 @@ export default function AboutComponent() {
           </ul>
           <div id="defaultTabContent">
             <div
-              class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800"
+              class="p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800"
               id="about"
-              role="tabpanel"
-              aria-labelledby="about-tab"
             >
               <h2 class="mb-3 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
                 Powering innovation & trust at 200,000+ companies worldwide
@@ -67,42 +76,16 @@ export default function AboutComponent() {
                 high velocity. Respond to changes and deliver great customer and
                 employee service experiences fast.
               </p>
-              <Link
-                to="#"
-                class="inline-flex items-center font-medium text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-700"
-              >
-                Learn more
-                <svg
-                  class=" w-2.5 h-2.5 ms-2 rtl:rotate-180"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 6 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m1 9 4-4-4-4"
-                  />
-                </svg>
-              </Link>
             </div>
             <div
               class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800"
               id="services"
-              role="tabpanel"
-              aria-labelledby="services-tab"
             >
               <h2 class="mb-5 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white">
                 We invest in the world’s potential
               </h2>
 
-              <ul
-                // role="list"
-                className="space-y-4 text-gray-500 dark:text-gray-400"
-              >
+              <ul className="space-y-4 text-gray-500 dark:text-gray-400">
                 <li class="flex space-x-2 rtl:space-x-reverse items-center">
                   <svg
                     class="flex-shrink-0 w-3.5 h-3.5 text-blue-600 dark:text-blue-500"
@@ -160,8 +143,6 @@ export default function AboutComponent() {
             <div
               class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800"
               id="statistics"
-              role="tabpanel"
-              aria-labelledby="statistics-tab"
             >
               <dl class="grid max-w-screen-xl grid-cols-2 gap-8 p-4 mx-auto text-gray-900 sm:grid-cols-3 xl:grid-cols-6 dark:text-white sm:p-8">
                 <div class="flex flex-col">

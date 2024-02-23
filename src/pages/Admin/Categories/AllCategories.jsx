@@ -3,6 +3,7 @@ import NavSectionAdmin from "../../../components/Admin/NavSectionAdmin";
 import axios from "axios";
 import {
   faEye,
+  faMagnifyingGlass,
   faPenToSquare,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
@@ -13,9 +14,29 @@ import { useAuth } from "../../../context/AuthContext";
 export default function AllCategories() {
   const [Categories, setCategories] = useState([]);
   const auth = useAuth();
+  const [query, setQuery] = useState("");
   useEffect(() => {
-    fetchCategories(); // Assuming you meant 'fetchCategories' instead of 'fetchCategorys'
-  }, []);
+    fetchCategories();
+    const fetchSearch = async () => {
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8000/api/Admin/Categories/search/${query}`
+        );
+        const data = await response.json();
+        data ? setCategories(data) : setCategories([]);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (query !== "") {
+      fetchSearch();
+    }
+  }, [query]);
+
+  const handleInputChange = (event) => {
+    setQuery(event.target.value);
+  };
 
   const fetchCategories = async () => {
     try {
@@ -27,8 +48,9 @@ export default function AllCategories() {
           },
         }
       );
-
-      setCategories(response.data.Categories);
+      if (query === "") {
+        setCategories(response.data.Categories);
+      }
     } catch (error) {
       console.error(
         "Error fetching categories:",
@@ -146,11 +168,38 @@ export default function AllCategories() {
   return (
     <>
       <nav className="rounded-xl p-3 mb-2 shadow-xl bg-white">
-        <NavSectionAdmin href="Create" Link="Create Category" />
+        {/* <NavSectionAdmin href="Create" Link="Create Category" /> */}
+        <div className="flex justify-between">
+          <div className="flex">
+            <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+              <FontAwesomeIcon
+                className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                icon={faMagnifyingGlass}
+              />
+            </span>
+            <input
+              type="text"
+              name="search"
+              id=""
+              placeholder="Search..."
+              value={query}
+              onChange={handleInputChange}
+              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+          </div>
+          <div className="w-1/5 flex justify-center">
+            <Link
+              to="Create"
+              className=" py-2 bg-amber-600 w-full text-center  text-white rounded-xl font-semibold hover:bg-green-600"
+            >
+              Create Categorie
+            </Link>
+          </div>
+        </div>
       </nav>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-sm font-bold uppercase bg-black text-white dark:bg-gray-700 dark:text-gray-400 text-center">
+          <thead className="text-sm font-bold uppercase bg-blue-950 text-white dark:bg-gray-700 dark:text-gray-400 text-center">
             <tr>
               <th scope="col" className="px-2 py-2">
                 IMG

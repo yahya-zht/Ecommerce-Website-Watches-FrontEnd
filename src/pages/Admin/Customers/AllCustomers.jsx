@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMagnifyingGlass,
+  faPenToSquare,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext";
@@ -8,9 +12,29 @@ import { useAuth } from "../../../context/AuthContext";
 export default function AllCustomers() {
   const [Customers, setCustomers] = useState([]);
   const auth = useAuth();
+  const [query, setQuery] = useState("");
   useEffect(() => {
     fetchCustomers();
-  }, []);
+    const fetchSearch = async () => {
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8000/api/Admin/Customers/search/${query}`
+        );
+        const data = await response.json();
+        data ? setCustomers(data) : setCustomers([]);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (query !== "") {
+      fetchSearch();
+    }
+  }, [query]);
+
+  const handleInputChange = (event) => {
+    setQuery(event.target.value);
+  };
 
   const fetchCustomers = async () => {
     try {
@@ -22,8 +46,9 @@ export default function AllCustomers() {
           },
         }
       );
-
-      setCustomers(response.data.Customers);
+      if (query === "") {
+        setCustomers(response.data.Customers);
+      }
     } catch (error) {
       console.error(
         "Error fetching customers:",
@@ -135,14 +160,35 @@ export default function AllCustomers() {
   return (
     <>
       <nav className="rounded-xl p-3 mb-2 shadow-xl bg-white">
-        <p className="text-center font-bold text-amber-500 text-4xl">
-          All Customers
-        </p>
+        <div className="flex justify-between">
+          <div className="flex">
+            <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+              <FontAwesomeIcon
+                className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                icon={faMagnifyingGlass}
+              />
+            </span>
+            <input
+              type="text"
+              name="search"
+              id=""
+              placeholder="Search..."
+              value={query}
+              onChange={handleInputChange}
+              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+          </div>
+          <div className="w-1/3 flex justify-center">
+            <p className="text-center font-bold text-amber-500 text-4xl">
+              All Customers
+            </p>
+          </div>
+        </div>
         {/* <NavSectionAdmin href="Create" Link="Create Customer" /> */}
       </nav>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-sm font-bold uppercase bg-black text-white dark:bg-gray-700 dark:text-gray-400 text-center">
+          <thead className="text-sm font-bold uppercase bg-blue-950 text-white dark:bg-gray-700 dark:text-gray-400 text-center">
             <tr>
               <th scope="col" className="px-2 py-2">
                 name

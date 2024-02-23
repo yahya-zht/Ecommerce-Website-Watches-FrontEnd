@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
   faFileImport,
-  faPenToSquare,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
@@ -82,13 +81,11 @@ export default function AllMessages() {
       key={Message.id}
     >
       <td
-        scope="row"
         className="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
       >
         {Message.First_name}
       </td>
       <td
-        scope="row"
         className="font-medium text-gray-900 whitespace-nowrap dark:text-white"
       >
         {Message.Last_name}
@@ -128,7 +125,7 @@ export default function AllMessages() {
       </nav>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-sm font-bold uppercase bg-black text-white dark:bg-gray-700 dark:text-gray-400 text-center">
+          <thead className="text-sm font-bold uppercase bg-blue-950 text-white dark:bg-gray-700 dark:text-gray-400 text-center">
             <tr>
               <th scope="col" className="px-2 py-2">
                 First Name

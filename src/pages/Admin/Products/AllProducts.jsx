@@ -9,9 +9,15 @@ import { Link } from "react-router-dom";
 import NavSectionAdmin from "../../../components/Admin/NavSectionAdmin";
 import axios from "axios";
 import { useAuth } from "../../../context/AuthContext";
+// import { useShoppingCart } from "../../../context/ShoppingCart";
+import { useSearch } from "../../../context/Search";
 export default function AllProducts() {
   const auth = useAuth();
   const [Products, setProducts] = useState([]);
+  const { resultsSearch, query } = useSearch();
+  // const { resultsSearch, query } = useShoppingCart();
+  const [error, setError] = useState(null);
+
   // useEffect(() => {
   //   fetch("http://127.0.0.1:8000/api/Admin/Products", {
   //     headers: {
@@ -25,7 +31,6 @@ export default function AllProducts() {
   //     .then((data) => setProducts(data.Products));
   //   // .then((data) => setProviders(data.Providers));
   // }, []);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/Admin/Products", {
@@ -41,13 +46,21 @@ export default function AllProducts() {
       })
       .then((data) => {
         if (data && data.Products) {
-          setProducts(data.Products);
+          if (query === "") {
+            // console.log("query !== =>", query);
+            // console.log("No results found", resultsSearch);
+            setProducts(data.Products);
+          } else {
+            // console.log("query []=>", query);
+            // console.log("2 =>", resultsSearch);
+            setProducts(resultsSearch);
+          }
         } else {
           throw new Error("Products data not found in the response");
         }
       })
       .catch((err) => setError(err.message));
-  }, [auth.token]);
+  }, [auth.token, resultsSearch]);
 
   const fetchProducts = async () => {
     await axios
@@ -145,7 +158,7 @@ export default function AllProducts() {
       </nav>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-sm font-bold uppercase bg-black text-white dark:bg-gray-700 dark:text-gray-400 text-center">
+          <thead className="text-sm font-bold uppercase bg-blue-950 text-white dark:bg-gray-700 dark:text-gray-400 text-center">
             <tr>
               <th scope="col" className="px-2 py-2">
                 IMG

@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "../pages/FrontEnd/Home";
 import About from "../pages/FrontEnd/About";
 import Products from "../pages/FrontEnd/Products";
@@ -32,7 +32,7 @@ import CategoriesIndex from "../pages/FrontEnd/CategoriesIndex";
 import Login from "../pages/Admin/Login";
 import Register from "../pages/Admin/Register";
 import AuthProvider from "../context/AuthContext";
-import PrivateRoute, { Loginz } from "./PrivateRoute";
+import PrivateRoute from "./PrivateRoute";
 import EditCategory from "../pages/Admin/Categories/EditCategory";
 import AllMessages from "../pages/Admin/Messages/AllMessages";
 import ShowMessage from "../pages/Admin/Messages/ShowMessage";
