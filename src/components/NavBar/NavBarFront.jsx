@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 
 export default function NavBarFront() {
   const Products = "/Products";
+  
+
   return (
     <>
       <nav className="bg-white  dark:bg-gray-900 border-b-2 border-green-500">

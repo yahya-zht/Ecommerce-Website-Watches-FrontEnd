@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CardsProduct } from "./CardsProduct";
 import { useShoppingCart } from "../../../context/ShoppingCart";
+import { useSearch } from "../../../context/Search";
 // import image1 from "../../../assets/image/pexels-antony-trivet-9878568.jpg";
 // import image2 from "../../../assets/image/pexels-antony-trivet-9979735.jpg";
 // import image3 from "../../../assets/image/pexels-antony-trivet-9981079.jpg";
@@ -9,6 +10,7 @@ import { useShoppingCart } from "../../../context/ShoppingCart";
 // import image6 from "../../../assets/image/pexels-antony-trivet-9981078.jpg";
 export default function CenterPage() {
   const [Products, setProducts] = useState([]);
+  const { resultsSearch } = useSearch();
   // useEffect(() => {
   //   fetch("http://127.0.0.1:8000/api/Products")
   //     .then((data) => console.log(data));
@@ -19,9 +21,16 @@ export default function CenterPage() {
     fetch("http://127.0.0.1:8000/api/products")
       .then((response) => response.json())
       // .then((data) => console.log(data.Providers))
-      .then((data) => setProducts(data.Products));
+
+      .then((data) => {
+        if (resultsSearch.length > 0) {
+          setProducts(resultsSearch);
+        } else {
+          setProducts(data.Products);
+        }
+      });
     // .then((data) => setProviders(data.Providers));
-  }, []);
+  }, [resultsSearch]);
   // console.log(Products);
   const { incrementItemQuantity } = useShoppingCart();
 
@@ -42,104 +51,7 @@ export default function CenterPage() {
   return (
     <div className="w-full md:w-3/4 m-2">
       <div className="grid grid-cols-2 lg:grid-cols-4  md:grid-cols-3 gap-2">
-        {/* <CardsProduct
-          title={Products[0].nom}
-          price={Products[0].prix_achat}
-          priceold={Products[0].prix_vente}
-          star
-        /> */}
         {ShowProducts}
-        {/* <CardsProduct
-          image={image1}
-          title="Rolex M50"
-          price="250"
-          priceold="499"
-          star
-        />
-        <CardsProduct
-          image={image2}
-          title="Rolex M50"
-          price="250"
-          priceold="499"
-          star
-        />
-        <CardsProduct
-          image={image3}
-          title="Rolex M50"
-          price="250"
-          priceold="499"
-          star
-        />
-        <CardsProduct
-          image={image4}
-          title="Rolex M50"
-          price="250"
-          priceold="499"
-          star
-        />
-        <CardsProduct
-          image={image5}
-          title="Rolex M50"
-          price="250"
-          priceold="499"
-          star
-        />
-        <CardsProduct
-          image={image6}
-          title="Rolex M50"
-          price="250"
-          priceold="499"
-          star
-        />
-        <CardsProduct
-          image={image1}
-          title="Rolex M50"
-          price="250"
-          priceold="499"
-          star
-        />
-        <CardsProduct
-          image={image5}
-          title="Rolex M50"
-          price="250"
-          priceold="499"
-          star
-        />
-        <CardsProduct
-          image={image2}
-          title="Rolex M50"
-          price="250"
-          priceold="499"
-          star
-        />
-        <CardsProduct
-          image={image6}
-          title="Rolex M50"
-          price="250"
-          priceold="499"
-          star
-        />
-        <CardsProduct
-          image={image3}
-          title="Rolex M50"
-          price="250"
-          priceold="499"
-          star
-        />
-        <CardsProduct
-          image={image4}
-          title="Rolex M50"
-          price="250"
-          priceold="499"
-          star
-        />
-        <CardsProduct
-          image={image2}
-          title="Rolex M50"
-          price="250"
-          priceold="499"
-          star
-        /> */}
       </div>
     </div>
   );

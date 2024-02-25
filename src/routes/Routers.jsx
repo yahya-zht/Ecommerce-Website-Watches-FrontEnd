@@ -51,7 +51,7 @@ export default function Routers() {
           <Route path="/Product/:id" element={<ShowProduct />} />
           <Route path="/Categories" element={<CategoriesIndex />}>
             <Route path="" element={<Categories />} />
-            <Route path="Show" element={<ShowCategory />} />
+            <Route path="Show/:id" element={<ShowCategory />} />
           </Route>
           <Route path="/Contact" element={<Contact />} />
           <Route path="/ShoppingCart" element={<ShoppingCart />} />

@@ -92,7 +92,7 @@ export default function NavAdmin() {
       document.getElementById("nav-messages").style.color = "white";
     }
   };
-  console.log(document.location.pathname);
+  // console.log(document.location.pathname);
   return (
     <>
       <div className="flex flex-col ">

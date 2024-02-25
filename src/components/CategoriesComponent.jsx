@@ -24,7 +24,7 @@ export default function CategoriesComponent() {
       Name={Category.Name}
       description="description"
       Image={Category.Image}
-      href={"Show"}
+      href={`Show/${Category.id}`}
     />
   ));
   // const Category = Categories.map((Category) => (

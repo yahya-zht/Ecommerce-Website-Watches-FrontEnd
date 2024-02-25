@@ -7,7 +7,7 @@ import { useSearch } from "../../context/Search";
 export default function NavSectionAdmin(props) {
   const { setResultsSearch, query, setQuery } = useSearch();
   // const { setResultsSearch, query, setQuery } = useShoppingCart();
-
+  
   useEffect(() => {
     const fetchSearch = async () => {
       try {
@@ -26,7 +26,7 @@ export default function NavSectionAdmin(props) {
         console.error("Error fetching data:", error);
       }
     };
-
+  
     if (query !== "") {
       // console.log("query !== =>", query);
       fetchSearch();
@@ -35,11 +35,11 @@ export default function NavSectionAdmin(props) {
       setResultsSearch([]);
     }
   }, [query]);
-
+  
   const handleInputChange = (event) => {
     setQuery(event.target.value);
   };
-
+  
   return (
     <div className="flex justify-between">
       <div className="flex">

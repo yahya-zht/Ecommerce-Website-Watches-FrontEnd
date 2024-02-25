@@ -21,6 +21,8 @@ export default function UpdateProduct() {
   const [Sales, setSales] = useState(0);
   const [Provider, setProvider] = useState();
   const [Providers, setProviders] = useState([]);
+  const [selectCategories, setSelectCategories] = useState([]);
+  const [Categories, setCategories] = useState([]);
   const [Errors, setErrors] = useState([]);
   const auth = useAuth();
   // useEffect(() => {
@@ -75,9 +77,43 @@ export default function UpdateProduct() {
   //       setProviders(data.Providers);
   //     });
   // };
+  const handleCategoryChange = (e) => {
+    const categoryId = parseInt(e.target.value);
+    const isChecked = e.target.checked;
+
+    if (isChecked) {
+      // If checkbox is checked, add category to selected categories
+      setSelectCategories([...selectCategories, categoryId]);
+    } else {
+      // If checkbox is unchecked, remove category from selected categories
+      setSelectCategories(selectCategories.filter((id) => id !== categoryId));
+    }
+  };
   useEffect(() => {
     fetchProduct();
+    fetchCategories();
   }, []);
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/Admin/Categories",
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      setCategories(response.data.Categories);
+      // console.log(response.data.Categories);
+    } catch (error) {
+      console.error(
+        "Error fetching providers:",
+        error.response?.data?.message || error.message
+      );
+      // Handle error appropriately, e.g., show an error message to the user
+    }
+  };
 
   const fetchProduct = async () => {
     try {
@@ -101,7 +137,10 @@ export default function UpdateProduct() {
         Ref,
         Sales,
         Image_Product,
+        categories: selectedCategories,
       } = response.data.product;
+      // const { SelectCategoriess } = response.data.product.categories;
+      // console.log(selectedCategories);
 
       setRef(Ref);
       setName(Name);
@@ -113,6 +152,9 @@ export default function UpdateProduct() {
       setSales(Sales);
       setProvider(provider_id);
       setImage_Product(Image_Product);
+      // setSelectCategories(SelectCategoriess);
+      setSelectCategories(selectedCategories.map((category) => category.id));
+      // console.log("setSelectCategories =>" + selectCategories);
     } catch (error) {
       console.error(
         "Error fetching product:",
@@ -164,7 +206,9 @@ export default function UpdateProduct() {
     formData.append("Price_First", PriceOld);
     formData.append("Sales", Sales);
     formData.append("provider_id", Provider);
-
+    selectCategories.forEach((categoryId) => {
+      formData.append("categories[]", categoryId);
+    });
     if (Image_Product !== null) {
       formData.append("Image_Product", Image_Product);
     }
@@ -446,6 +490,35 @@ export default function UpdateProduct() {
                     <p className="text-red-500 text-sm italic">{Error.Sales}</p>
                   )}
                 </div>
+              </div>
+            </div>
+            <div>
+              <label
+                htmlFor="base-input"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-3"
+              >
+                Categories
+              </label>
+              <div className="mb-3 flex">
+                {Categories.map((item) => (
+                  <div className="" key={item.id}>
+                    <input
+                      id={item.Name}
+                      checked={selectCategories.includes(item.id)}
+                      name="category[]"
+                      onChange={handleCategoryChange}
+                      value={item.id}
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    />
+                    <label
+                      htmlFor={item.Name}
+                      className="ms-1 mr-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >
+                      {item.Name}
+                    </label>
+                  </div>
+                ))}
               </div>
             </div>
             <div>

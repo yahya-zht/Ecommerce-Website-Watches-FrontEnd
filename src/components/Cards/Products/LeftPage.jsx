@@ -1,60 +1,77 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useSearch } from "../../../context/Search";
 
 export default function LeftPage() {
+  const [Categories, setCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const { setResultsSearch } = useSearch();
+  useEffect(() => {
+    const fetchSearch = async () => {
+      const formData = new FormData();
+      formData.append("list[]", selectedCategories);
+      try {
+        const response = await axios.post(
+          `http://127.0.0.1:8000/api/Categories/search/Products`,
+          { list: selectedCategories }
+        );
+        // const data = await response.json();
+        console.log("response list => " + response.data.list);
+        setResultsSearch(response.data.Products);
+        console.log("response data => " + response.data.Products);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchSearch();
+  }, [selectedCategories]);
+  const handleCategoryChange = (e) => {
+    const categoryId = parseInt(e.target.value);
+    const isChecked = e.target.checked;
+
+    if (isChecked) {
+      // If checkbox is checked, add category to selected categories
+      setSelectedCategories([...selectedCategories, categoryId]);
+    } else {
+      // If checkbox is unchecked, remove category from selected categories
+      setSelectedCategories(
+        selectedCategories.filter((id) => id !== categoryId)
+      );
+    }
+    console.log(selectedCategories);
+  };
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/api/categories")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Data : ", data.Categories);
+        setCategories(data.Categories);
+      });
+  }, []);
+  const category = Categories.map((item) => (
+    <div>
+      <input
+        type="checkbox"
+        className="mb-1 rounded-sm focus:ring-green-600 checked:bg-green-600"
+        name="Rolex"
+        id={item.Name}
+        value={item.id}
+        onClick={handleCategoryChange}
+      />
+      <label className="ml-2 font-bold text-m" htmlFor={item.Name}>
+        {item.Name}
+      </label>
+    </div>
+  ));
   return (
     <div className="hidden md:block w-1/4 bg-white m-4 p-2 rounded-md shadow-md">
-      <div className="ml-2">
-        <p className="font-bold text-xl my-1">Filter</p>
+      <div className="ml-2  ">
+        <p className="font-bold text-xl my-1 ">Filter</p>
         <div className="ml-2">
           <div className="mt-1 ">
             <p className="font-bold text-l">Brands </p>
             <form action="#">
-              <div className="flex flex-col ml-4">
-                <div>
-                  <input
-                    type="checkbox"
-                    className="mb-1 rounded-sm focus:ring-green-600 checked:bg-green-600"
-                    name="Rolex"
-                    id="Rolex"
-                  />
-                  <label className="ml-2 font-bold text-m" htmlFor="Rolex">
-                    Rolex
-                  </label>
-                </div>
-                <div>
-                  <input
-                    type="checkbox"
-                    className="mb-1 rounded-sm focus:ring-green-600 checked:bg-green-600 "
-                    name="Casio"
-                    id="Casio"
-                  />
-                  <label className="ml-2 font-bold text-m" htmlFor="Casio">
-                    Casio
-                  </label>
-                </div>
-                <div>
-                  <input
-                    className="mb-1 rounded-sm focus:ring-green-600 checked:bg-green-600 "
-                    type="checkbox"
-                    name="Omega"
-                    id="Omega"
-                  />
-                  <label className="ml-2 font-bold text-m" htmlFor="Omega">
-                    Omega
-                  </label>
-                </div>
-                <div>
-                  <input
-                    className="mb-1 rounded-sm focus:ring-green-600 checked:bg-green-600"
-                    type="checkbox"
-                    name="Polex"
-                    id="Polex"
-                  />
-                  <label className="ml-2 font-bold text-m" htmlFor="Polex">
-                    Polex
-                  </label>
-                </div>
-              </div>
+              <div className="flex flex-col ml-4">{category}</div>
             </form>
           </div>
           <div className="mt-3 border-t-4 pt-2">
