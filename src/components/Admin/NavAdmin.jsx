@@ -16,82 +16,82 @@ import Logo from "../../assets/image/logo_watche.png";
 import { useAuth } from "../../context/AuthContext";
 export default function NavAdmin() {
   const auth = useAuth();
-  const f = (a) => {
-    const p = document.getElementsByClassName("click").length;
-    if (a === "Dashboard") {
-      for (let i = 0; i < p; i++) {
-        document.getElementsByClassName("click")[i].style.backgroundColor =
-          "rgb(23 37 84)";
-        document.getElementsByClassName("click")[i].style.color = "white";
-      }
-      document.getElementById("nav-dashboard").style.backgroundColor =
-        " rgb(217 119 6)";
-      document.getElementById("nav-dashboard").style.color = "white";
-    } else if (a === "Products") {
-      for (let i = 0; i < p; i++) {
-        document.getElementsByClassName("click")[i].style.backgroundColor =
-          "rgb(23 37 84)";
-        document.getElementsByClassName("click")[i].style.color = "white";
-      }
-      document.getElementById("nav-products").style.backgroundColor =
-        " rgb(217 119 6)";
-      document.getElementById("nav-products").style.color = "white";
-    } else if (a === "Categories") {
-      for (let i = 0; i < p; i++) {
-        document.getElementsByClassName("click")[i].style.backgroundColor =
-          "rgb(23 37 84)";
-        document.getElementsByClassName("click")[i].style.color = "white";
-      }
-      document.getElementById("nav-categories").style.backgroundColor =
-        " rgb(217 119 6)";
-      document.getElementById("nav-categories").style.color = "white";
-    } else if (a === "Orders") {
-      for (let i = 0; i < p; i++) {
-        document.getElementsByClassName("click")[i].style.backgroundColor =
-          "rgb(23 37 84)";
-        document.getElementsByClassName("click")[i].style.color = "white";
-      }
-      document.getElementById("nav-orders").style.backgroundColor =
-        " rgb(217 119 6)";
-      document.getElementById("nav-orders").style.color = "white";
-    } else if (a === "Customers") {
-      for (let i = 0; i < p; i++) {
-        document.getElementsByClassName("click")[i].style.backgroundColor =
-          "rgb(23 37 84)";
-        document.getElementsByClassName("click")[i].style.color = "white";
-      }
-      document.getElementById("nav-customers").style.backgroundColor =
-        " rgb(217 119 6)";
-      document.getElementById("nav-customers").style.color = "white";
-    } else if (a === "Providers") {
-      for (let i = 0; i < p; i++) {
-        document.getElementsByClassName("click")[i].style.backgroundColor =
-          "rgb(23 37 84)";
-        document.getElementsByClassName("click")[i].style.color = "white";
-      }
-      document.getElementById("nav-providers").style.backgroundColor =
-        " rgb(217 119 6)";
-      document.getElementById("nav-providers").style.color = "white";
-    } else if (a === "Profile") {
-      for (let i = 0; i < p; i++) {
-        document.getElementsByClassName("click")[i].style.backgroundColor =
-          "rgb(23 37 84)";
-        document.getElementsByClassName("click")[i].style.color = "white";
-      }
-      document.getElementById("nav-profile").style.backgroundColor =
-        " rgb(217 119 6)";
-      document.getElementById("nav-profile").style.color = "white";
-    } else if (a === "Messages") {
-      for (let i = 0; i < p; i++) {
-        document.getElementsByClassName("click")[i].style.backgroundColor =
-          "rgb(23 37 84)";
-        document.getElementsByClassName("click")[i].style.color = "white";
-      }
-      document.getElementById("nav-messages").style.backgroundColor =
-        " rgb(217 119 6)";
-      document.getElementById("nav-messages").style.color = "white";
-    }
-  };
+  // const f = (a) => {
+  //   const p = document.getElementsByClassName("click").length;
+  //   if (a === "Dashboard") {
+  //     for (let i = 0; i < p; i++) {
+  //       document.getElementsByClassName("click")[i].style.backgroundColor =
+  //         "rgb(23 37 84)";
+  //       document.getElementsByClassName("click")[i].style.color = "white";
+  //     }
+  //     document.getElementById("nav-dashboard").style.backgroundColor =
+  //       " rgb(217 119 6)";
+  //     document.getElementById("nav-dashboard").style.color = "white";
+  //   } else if (a === "Products") {
+  //     for (let i = 0; i < p; i++) {
+  //       document.getElementsByClassName("click")[i].style.backgroundColor =
+  //         "rgb(23 37 84)";
+  //       document.getElementsByClassName("click")[i].style.color = "white";
+  //     }
+  //     document.getElementById("nav-products").style.backgroundColor =
+  //       " rgb(217 119 6)";
+  //     document.getElementById("nav-products").style.color = "white";
+  //   } else if (a === "Categories") {
+  //     for (let i = 0; i < p; i++) {
+  //       document.getElementsByClassName("click")[i].style.backgroundColor =
+  //         "rgb(23 37 84)";
+  //       document.getElementsByClassName("click")[i].style.color = "white";
+  //     }
+  //     document.getElementById("nav-categories").style.backgroundColor =
+  //       " rgb(217 119 6)";
+  //     document.getElementById("nav-categories").style.color = "white";
+  //   } else if (a === "Orders") {
+  //     for (let i = 0; i < p; i++) {
+  //       document.getElementsByClassName("click")[i].style.backgroundColor =
+  //         "rgb(23 37 84)";
+  //       document.getElementsByClassName("click")[i].style.color = "white";
+  //     }
+  //     document.getElementById("nav-orders").style.backgroundColor =
+  //       " rgb(217 119 6)";
+  //     document.getElementById("nav-orders").style.color = "white";
+  //   } else if (a === "Customers") {
+  //     for (let i = 0; i < p; i++) {
+  //       document.getElementsByClassName("click")[i].style.backgroundColor =
+  //         "rgb(23 37 84)";
+  //       document.getElementsByClassName("click")[i].style.color = "white";
+  //     }
+  //     document.getElementById("nav-customers").style.backgroundColor =
+  //       " rgb(217 119 6)";
+  //     document.getElementById("nav-customers").style.color = "white";
+  //   } else if (a === "Providers") {
+  //     for (let i = 0; i < p; i++) {
+  //       document.getElementsByClassName("click")[i].style.backgroundColor =
+  //         "rgb(23 37 84)";
+  //       document.getElementsByClassName("click")[i].style.color = "white";
+  //     }
+  //     document.getElementById("nav-providers").style.backgroundColor =
+  //       " rgb(217 119 6)";
+  //     document.getElementById("nav-providers").style.color = "white";
+  //   } else if (a === "Profile") {
+  //     for (let i = 0; i < p; i++) {
+  //       document.getElementsByClassName("click")[i].style.backgroundColor =
+  //         "rgb(23 37 84)";
+  //       document.getElementsByClassName("click")[i].style.color = "white";
+  //     }
+  //     document.getElementById("nav-profile").style.backgroundColor =
+  //       " rgb(217 119 6)";
+  //     document.getElementById("nav-profile").style.color = "white";
+  //   } else if (a === "Messages") {
+  //     for (let i = 0; i < p; i++) {
+  //       document.getElementsByClassName("click")[i].style.backgroundColor =
+  //         "rgb(23 37 84)";
+  //       document.getElementsByClassName("click")[i].style.color = "white";
+  //     }
+  //     document.getElementById("nav-messages").style.backgroundColor =
+  //       " rgb(217 119 6)";
+  //     document.getElementById("nav-messages").style.color = "white";
+  //   }
+  // };
   // console.log(document.location.pathname);
   return (
     <>
@@ -110,7 +110,7 @@ export default function NavAdmin() {
           <li className="flex ">
             <Link
               to=""
-              onClick={() => f("Dashboard")}
+              // onClick={() => f("Dashboard")}
               id="nav-dashboard"
               className="click hover:text-green-100 rounded-xl w-full p-2 hover:bg-amber-600 focus:text-green-100 focus:bg-amber-600"
             >
@@ -122,7 +122,7 @@ export default function NavAdmin() {
             <Link
               to="Products"
               id="nav-products"
-              onClick={() => f("Products")}
+              // onClick={() => f("Products")}
               className="click hover:text-green-100 rounded-xl w-full p-2 hover:bg-amber-600 focus:text-green-100 focus:bg-amber-600"
             >
               <FontAwesomeIcon icon={faTag} className="mr-2 w-8" />
@@ -132,7 +132,7 @@ export default function NavAdmin() {
           <li className="flex ">
             <Link
               to="Categories"
-              onClick={() => f("Categories")}
+              // onClick={() => f("Categories")}
               id="nav-categories"
               className="click hover:text-green-100 rounded-xl w-full p-2 hover:bg-amber-600 focus:text-green-100 focus:bg-amber-600"
             >
@@ -144,7 +144,7 @@ export default function NavAdmin() {
             {" "}
             <Link
               to="Orders"
-              onClick={() => f("Orders")}
+              // onClick={() => f("Orders")}
               id="nav-orders"
               className="click hover:text-green-100 rounded-xl w-full p-2 hover:bg-amber-600 focus:text-green-100 focus:bg-amber-600"
             >
@@ -155,7 +155,7 @@ export default function NavAdmin() {
           <li className="flex ">
             <Link
               to="Customers"
-              onClick={() => f("Customers")}
+              // onClick={() => f("Customers")}
               id="nav-customers"
               className="click hover:text-green-100 rounded-xl w-full p-2 hover:bg-amber-600 focus:text-green-100 focus:bg-amber-600"
             >
@@ -166,7 +166,7 @@ export default function NavAdmin() {
           <li className="flex ">
             <Link
               to="Providers"
-              onClick={() => f("Providers")}
+              // onClick={() => f("Providers")}
               id="nav-providers"
               className="click hover:text-green-100 rounded-xl w-full p-2 hover:bg-amber-600 focus:text-green-100 focus:bg-amber-600"
             >
@@ -180,7 +180,7 @@ export default function NavAdmin() {
           <li className="flex ">
             <Link
               to="Profile"
-              onClick={() => f("Profile")}
+              // onClick={() => f("Profile")}
               id="nav-profile"
               className="click hover:text-green-100 rounded-xl w-full p-2 hover:bg-amber-600 focus:text-green-100 focus:bg-amber-600"
             >
@@ -191,7 +191,7 @@ export default function NavAdmin() {
           <li className="flex ">
             <Link
               to="Messages"
-              onClick={() => f("Messages")}
+              // onClick={() => f("Messages")}
               id="nav-messages"
               className="click hover:text-green-100 rounded-xl w-full p-2 hover:bg-amber-600 focus:text-green-100 focus:bg-amber-600"
             >

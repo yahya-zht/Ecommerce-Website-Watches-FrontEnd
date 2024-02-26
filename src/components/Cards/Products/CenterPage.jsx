@@ -51,7 +51,7 @@ export default function CenterPage() {
   return (
     <div className="w-full md:w-3/4 m-2">
       <div className="grid grid-cols-2 lg:grid-cols-4  md:grid-cols-3 gap-2">
-        {ShowProducts}
+        {ShowProducts ? ShowProducts : " Loading..."}
       </div>
     </div>
   );

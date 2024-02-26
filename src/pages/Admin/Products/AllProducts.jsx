@@ -153,7 +153,6 @@ export default function AllProducts() {
   return (
     <>
       <nav className="rounded-xl p-3 mb-2 shadow-xl bg-white">
-        <h1>Welcome! {auth.user ? auth.user : "ok"}</h1>
         <NavSectionAdmin href="Create" Link="Add Product" />
       </nav>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">

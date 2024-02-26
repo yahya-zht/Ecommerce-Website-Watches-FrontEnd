@@ -20,7 +20,7 @@ export default function TopPage() {
             <div className="mt-5 flex justify-center ">
               <Link
                 className="bg-green-700 text-xl text-yellow-400 rounded-2xl text-center w-1/2 py-4 font-bold hover:bg-yellow-400 hover:text-green-700"
-                to="#"
+                to="/Products"
               >
                 ShopNew
               </Link>

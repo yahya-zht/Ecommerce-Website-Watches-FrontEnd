@@ -51,6 +51,9 @@ export default function Dashboard() {
   return (
     <>
       <div className="h-full flex flex-col justify-center">
+        <nav className="rounded-xl p-3 mb-2 shadow-xl bg-white">
+          <h1>Welcome! {auth.user ? auth.user : "ok"}</h1>
+        </nav>
         <div className="mx-4">
           <div className="flex justify-between font-bold text-2xl mb-3">
             <div className="flex flex-col w-1/3 justify-center p-3 rounded-xl border-4 border-amber-500 bg-white shadow-xl">

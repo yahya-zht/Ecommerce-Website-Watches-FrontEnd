@@ -80,14 +80,10 @@ export default function AllMessages() {
       className="bg-white text-sm dark:bg-gray-800 text-center hover:bg-amber-50 dark:hover:bg-gray-600"
       key={Message.id}
     >
-      <td
-        className="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-      >
+      <td className="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
         {Message.First_name}
       </td>
-      <td
-        className="font-medium text-gray-900 whitespace-nowrap dark:text-white"
-      >
+      <td className="font-medium text-gray-900 whitespace-nowrap dark:text-white">
         {Message.Last_name}
       </td>
       <td className=" ">{Message.Email}</td>
@@ -120,7 +116,6 @@ export default function AllMessages() {
   return (
     <>
       <nav className="rounded-xl p-3 mb-2 shadow-xl bg-white">
-        <h1>Welcome! {auth.user ? auth.user : "ok"}</h1>
         {/* <NavSectionAdmin href="Create" Link="Add Product" /> */}
       </nav>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
